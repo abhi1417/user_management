@@ -1,9 +1,4 @@
     <?php 
-    
-
-
-
-
     include("includes/dbConnection.php");
     include("includes/header.php");
     //include("includes/sidebar.php");
@@ -89,8 +84,8 @@
                                 <th>Status</th>        
                                 <th>Comment</th>
                                 <th>Action</th>
-                        </tr>
-                    </thead>
+                            </tr>
+                        </thead>
                     <tbody>
                         <?php        
                         if (mysqli_num_rows($result) > 0) {
@@ -132,7 +127,4 @@
         <!-- end container -->
         <!-- </div>     -->
 
-        <?php 
-
-        include("includes/footer.php");
-        ?>
+        <?php include("includes/footer.php"); ?>

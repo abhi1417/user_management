@@ -31,7 +31,7 @@
                                 </li>
                                 <li><a href="leave_manager.php">Leave Manager</a></li>
                                 <li><a href="news_section.php">News Section</a></li>
-                                <li><a href="pollicy.php">Pollicy</a></li>
+                                <li><a href="policy.php">Policy</a></li>
                                 <li><a href="bills.php">Bills</a></li>
                             </ul>
                         </div>

@@ -571,3 +571,16 @@ $total= 0;
 
         include("includes/footer.php");
         ?>
+
+
+
+
+        $policy_type = isset($_POST['policy_type']) && (!empty($_POST['policy_type'])) ? "'$policy_type'" : NULL;
+            $file_path   = isset($_FILES['file_path']['name']) && !empty($_FILES['file_path']['name']) ? "'$file_path'" : NULL;
+            $comment     = isset($_POST['comment']) && !empty($_POST['comment']) ? "'$comment'" : NULL;
+
+            if(!empty($_POST['comment'])){
+                    $comment = "'".$_POST['comment']."'";
+                }else{
+                    $comment = "NULL";
+                }

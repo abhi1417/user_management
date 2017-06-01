@@ -125,7 +125,47 @@
 	        	header("location: employee_edit.php?id={$id}");
 	        }
     	}
-    	/* employee login  */
+    	/*PDF Upload*/
+    	else if(isset($_POST['uploadBtn'])) {
+
+    		//print_r($_FILES);
+    		$folder = "pdf/";
+
+			move_uploaded_file($_FILES["file_path"]["tmp_name"] , "$folder".$_FILES["file_path"]["name"]);
+
+			//echo $_FILES["file_path"]["name"]."loaded...";
+
+
+    		$policy_type = $_POST['policy_type'] && !empty($_POST['policy_type']) ? "'".$_POST['policy_type']."'" : "NULL";
+			$description = $_POST['description'] && !empty($_POST['description']) ? "'".$_POST['description']."'" : "NULL";
+
+    		$from_date = $_POST['from_date'] ;
+    		$to_date   = $_POST['to_date'] ;
+
+    		$file_path   = $_FILES["file_path"]["name"] && !empty($_FILES['file_path']['name']) ? "'".$_FILES['file_path']['name']."'" : "NULL";
+    		$comment     = $_POST['comment'] && !empty($_POST['comment']) ? "'".$_POST['comment']."'" : "NULL";
+
+    		$policy_from_date = date('Y-m-d', strtotime( $from_date ));
+		    $policy_to_date   = date('Y-m-d', strtotime( $to_date ));
+
+    		if(!empty($_POST['comment'])){
+			    $comment = "'".$_POST['comment']."'";
+			}else{
+			    $comment = "NULL";
+			} 
+			print_r($_POST); 
+			echo "<pre>";
+    		echo $query = "INSERT INTO user_policy (policy_type, description, from_date, to_date, file_path, comment) VALUES (".$policy_type.", ".$description.", '".$policy_from_date."', '".$policy_to_date."', ".$file_path.", ".$comment.")";
+			if ($conn->query($query) === TRUE) {
+					$id = mysqli_insert_id($conn);
+				} else {
+					echo "Error: " . $query . "<br>" . $conn->error;
+				}
+				$conn->close();
+				header("Location: policy_view.php?id={$id}"); /* Redirect browser */
+				exit();
+  		}
+  		    	/* employee login  */
     	 else if (isset($_POST['login_submit'])) {
 
 			$email = $_POST['email'];
@@ -170,7 +210,7 @@
 					echo "Error: " . $sql . "<br>" . $conn->error;
 				}
 				$conn->close();
-				header("Location: leave_view.php?id={$id}"); /* Redirect browser */
+				//header("Location: leave_view.php?id={$id}"); /* Redirect browser */
 				exit(); 
 		}
 	}

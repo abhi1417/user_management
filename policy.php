@@ -2,7 +2,7 @@
 include("includes/dbConnection.php");
 include("includes/header.php");
 include("includes/sidebar.php");
-// include("upload.php");
+
 ?>
 
 	<!-- START PAGE CONTENT -->
@@ -10,7 +10,7 @@ include("includes/sidebar.php");
 		<div class="container">                                               
 			<div class="row">
 				<div class="col-lg-12">
-                    <h4 class="header-title m-t-0">Personal Information</h4>
+                    <h4 class="header-title m-t-0">Policy Information</h4>
                     <!-- Pesronal Information Start -->
                     <div class="p-20 m-b-20">
                     	<form name="myForm" id="myform" action="action.php" method="POST" class="form-horizontal" role="form" enctype="multipart/form-data">                
@@ -21,19 +21,13 @@ include("includes/sidebar.php");
                     			</div>
             				</div>
                             <div class="form-group">
-                                <label for="description" class="col-sm-3 control-label">Description *</label>
-                                <div class="col-xs-4">
-                                    <input type="text" id="description" placeholder="Description" value="" name="description" class="form-control ">
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label for="from_date" class="col-sm-3 control-label">Policy From Date *</label>
+                                <label for="from_date" class="col-sm-3 control-label">Effective From *</label>
                                 <div class="col-xs-4">
                                     <input type="text" class="form-control" placeholder="yyyy/mm/dd" id="datepicker1" name="from_date" id="from_date">
                                 </div>
                             </div>
                             <div class="form-group">                                        
-                                <label for="to_date" class="col-sm-3 control-label">Policy To Date *</label>
+                                <label for="to_date" class="col-sm-3 control-label">Effective Till *</label>
                                 <div class="col-xs-4">
                                     <input type="text" class="form-control" placeholder="yyyy/mm/dd" id="datepicker2" name="to_date" id="to_date">
                                 </div>

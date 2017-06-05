@@ -1,7 +1,8 @@
 <?php
  	session_start();
 	include("includes/dbConnection.php");
-  	if ($_POST) {
+	if ($_POST) {
+	
   		/* Employee Registration */
 	  	if(isset($_POST['registrationBtn']))
 	  	{	
@@ -88,6 +89,7 @@
   	    else if(isset($_POST['update']))
     	{
 	        $id = $_POST['id'];
+
 	        $first_name = $_POST['first_name'];
 	        $last_name = $_POST['last_name'];
 	        $email = $_POST['email'];
@@ -126,11 +128,10 @@
 	        }
     	}
 
-
-
-    	/*PDF Upload*/
-    	else if(isset($_POST['uploadBtn'])) {
-
+    	/*PDF Upload*/  	
+    	else if(isset($_POST['uploadBtn'])) 
+    	{
+    		
     		$folder = "pdf/";
 
 			move_uploaded_file($_FILES["file_path"]["tmp_name"] , "$folder".$_FILES["file_path"]["name"]);
@@ -148,7 +149,7 @@
 			}else{
 			    $comment = "NULL";
 			} 
-    		$query = "INSERT INTO user_policy (policy_type,  from_date, to_date, file_path, comment) VALUES (".$policy_type.", '".$policy_from_date."', '".$policy_to_date."', ".$file_path.", ".$comment.")";
+    		$query = "INSERT INTO user_policy (policy_type, from_date, to_date, file_path, comment) VALUES (".$policy_type.", '".$policy_from_date."', '".$policy_to_date."', ".$file_path.", ".$comment.")";
 			if ($conn->query($query) === TRUE) {
 					$id = mysqli_insert_id($conn);
 				} else {
@@ -159,8 +160,59 @@
 				exit();
   		}
 
+  		/*policy update*/
+  	    else if(isset($_POST['updateBtn']))
+    	{
 
-  		    	/* employee login  */
+    		$folder = "pdf/";
+
+			move_uploaded_file($_FILES["file_path"]["tmp_name"] , "$folder".$_FILES["file_path"]["name"]);
+
+   		    $id = $_POST['id'];
+	        $policy_type = $_POST['policy_type'] && !empty($_POST['policy_type']) ? "'".$_POST['policy_type']."'" : "NULL";
+    		$from_date   = $_POST['from_date'] ;
+    		$to_date     = $_POST['to_date'] ;
+    		$file_path   = $_FILES["file_path"]["name"] && !empty($_FILES['file_path']['name']) ? "'".$_FILES['file_path']['name']."'" : "NULL";
+    		$comment     = $_POST['comment'] && !empty($_POST['comment']) ? "'".$_POST['comment']."'" : "NULL";
+
+	        $policy_from_date = date('Y-m-d', strtotime( $from_date ));
+		    $policy_to_date   = date('Y-m-d', strtotime( $to_date ));
+
+		    if(!empty($_POST['comment'])){
+			    $comment = "'".$_POST['comment']."'";
+			}else{
+			    $comment = "NULL";
+			}			
+		    
+			$file_size = $_FILES['file_path']['size']; 
+		    $file_type = $_FILES['file_path']['type']; 
+		   
+		    //print_r($_FILES['file_path']['error']); die;
+		   
+		    if($_FILES == ''){
+
+		    if (($file_size > 10485760)){      
+		        $msg_size = 'File too large. File must be less than 5 Megabytes.'; 	
+		        header("location: policy_edit.php?msg_size={$msg_size}");	        
+		    }
+		    else if (($file_type != "application/pdf")){
+		        $msg_size = 'Invalid file type. Only PDF types are accepted.'; 
+		        header("location: policy_edit.php?msg_size={$msg_size}");	        
+		    }    
+		}
+		else {
+			$query = "UPDATE user_policy SET policy_type = ".$policy_type.", from_date = '".$policy_from_date."', to_date = '".$policy_to_date."', file_path = ".$file_path.", comment = ".$comment."   WHERE id = '$id'"; 
+			$result = $conn->query($query);
+			$row_count =  mysqli_affected_rows($conn);
+			if($row_count > 0 )
+			{
+	            header("location: policy_view.php");
+	        } else{
+	        	header("location: policy_edit.php?id={$id}");
+	        }
+	    }
+	}
+	 	/* employee login  */
     	 else if (isset($_POST['login_submit'])) {
 
 			$email = $_POST['email'];
@@ -208,6 +260,25 @@
 				//header("Location: leave_view.php?id={$id}"); /* Redirect browser */
 				exit(); 
 		}
+		/*News Section*/
+		else if (isset($_POST['applyBtn'])) {
+
+
+			$tittle = $_POST['tittle'];
+			$description  = $_POST['description'];
+	        		
+	       echo $sql = "INSERT INTO user_news (tittle, description) 
+	        VALUES ('$tittle', '$description')";
+
+	        if ($conn->query($sql) === TRUE) {
+	        	$id = mysqli_insert_id($conn);
+	        } else {
+					echo "Error: " . $sql . "<br>" . $conn->error;
+				}
+				$conn->close();
+				header("Location: news_view.php?id={$id}"); /* Redirect browser */
+				exit(); 
+		}
 	}
   	/* employee delete */
   	elseif(isset($_GET['id']))
@@ -228,4 +299,24 @@
 		$result = $conn->query($query);
 		header("location: policy_view.php");
 	} 
+
+	elseif(isset($_GET['download_file']))
+	{
+		header("Content-Type: application/octet-stream");
+		$file = 'pdf/'.base64_decode($_GET["download_file"]);
+		
+		
+		header('Content-Description: File Transfer');
+		header('Content-Type: application/octet-stream');
+		header("Content-Type: application/force-download");
+		header('Content-Disposition: attachment; filename=' . urlencode(basename($file)));
+		header('Expires: 0');
+		header('Cache-Control: must-revalidate, post-check=0, pre-check=0');
+		header('Pragma: public');
+		header('Content-Length: ' . filesize($file));
+		ob_clean();
+		flush();
+		readfile($file);
+		exit;
+	}
 ?>

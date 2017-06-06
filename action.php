@@ -132,7 +132,7 @@
     	else if(isset($_POST['uploadBtn'])) 
     	{
     		
-    		$folder = "pdf/";
+    		$folder = "assets/pdf/";
 
 			move_uploaded_file($_FILES["file_path"]["tmp_name"] , "$folder".$_FILES["file_path"]["name"]);
 
@@ -163,11 +163,6 @@
   		/*policy update*/
   	    else if(isset($_POST['updateBtn']))
     	{
-
-    		$folder = "pdf/";
-
-			move_uploaded_file($_FILES["file_path"]["tmp_name"] , "$folder".$_FILES["file_path"]["name"]);
-
    		    $id = $_POST['id'];
 	        $policy_type = $_POST['policy_type'] && !empty($_POST['policy_type']) ? "'".$_POST['policy_type']."'" : "NULL";
     		$from_date   = $_POST['from_date'] ;
@@ -184,36 +179,39 @@
 			    $comment = "NULL";
 			}			
 		    
+    		$folder = "assets/pdf/";
 			$file_size = $_FILES['file_path']['size']; 
 		    $file_type = $_FILES['file_path']['type']; 
 		   
 		    //print_r($_FILES['file_path']['error']); die;
 		   
-		    if($_FILES == ''){
+			if($_FILES == ''){
 
-		    if (($file_size > 10485760)){      
-		        $msg_size = 'File too large. File must be less than 5 Megabytes.'; 	
-		        header("location: policy_edit.php?msg_size={$msg_size}");	        
-		    }
-		    else if (($file_type != "application/pdf")){
-		        $msg_size = 'Invalid file type. Only PDF types are accepted.'; 
-		        header("location: policy_edit.php?msg_size={$msg_size}");	        
-		    }    
-		}
-		else {
-			$query = "UPDATE user_policy SET policy_type = ".$policy_type.", from_date = '".$policy_from_date."', to_date = '".$policy_to_date."', file_path = ".$file_path.", comment = ".$comment."   WHERE id = '$id'"; 
-			$result = $conn->query($query);
-			$row_count =  mysqli_affected_rows($conn);
-			if($row_count > 0 )
-			{
-	            header("location: policy_view.php");
-	        } else{
-	        	header("location: policy_edit.php?id={$id}");
-	        }
+			  	if (($file_size > 5242880)){      
+			   		$msg_size = 'File too large. File must be less than 5 Megabytes.'; 	
+			   		header("location: policy_edit.php?msg_size={$msg_size}");	        
+			   	}
+			    else if (($file_type != "application/pdf")){
+			    	$msg_size = 'Invalid file type. Only PDF types are accepted.'; 
+			    	header("location: policy_edit.php?msg_size={$msg_size}");	        
+			    }    
+			    move_uploaded_file($_FILES["file_path"]["tmp_name"] , "$folder".$_FILES["file_path"]["name"]);
+			} else {
+				$query = "UPDATE user_policy SET policy_type = ".$policy_type.", from_date = '".$policy_from_date."', to_date = '".$policy_to_date."', file_path = ".$file_path.", comment = ".$comment." WHERE id = '$id'"; 
+				$result = $conn->query($query);
+				$row_count =  mysqli_affected_rows($conn);
+				if($row_count > 0 )
+				{
+					header("location: policy_view.php");
+				} else{
+					header("location: policy_edit.php?id={$id}");
+				}
+			}
 	    }
-	}
+
 	 	/* employee login  */
-    	 else if (isset($_POST['login_submit'])) {
+    	else if (isset($_POST['login_submit'])) 
+    	{
 
 			$email = $_POST['email'];
 			$password = $_POST['password'];
@@ -232,9 +230,11 @@
 				$_SESSION['msg'] = " Wrong username  or password.";
 				header("location: index.php");
 			}		
-		}	
+		}
+
 		/*leave insert data*/
-		else if (isset($_POST['apply'])) {
+		else if (isset($_POST['applyLeave'])) 
+		{
 
 
 			$employee_id = $_POST['employee_id'];
@@ -260,15 +260,62 @@
 				//header("Location: leave_view.php?id={$id}"); /* Redirect browser */
 				exit(); 
 		}
+
 		/*News Section*/
-		else if (isset($_POST['applyBtn'])) {
+		else if (isset($_POST['applyNews'])) 
+		{
 
+		    $tittle      = $_POST['tittle'];
+		    $image       = $_FILES['image']['name'];
+		    $description = $_POST['description'];
+		    $news_date   = $_POST['news_date'] ;		
 
-			$tittle = $_POST['tittle'];
-			$description  = $_POST['description'];
-	        		
-	       echo $sql = "INSERT INTO user_news (tittle, description) 
-	        VALUES ('$tittle', '$description')";
+	        $news_from_date = date('Y-m-d', strtotime( $news_date ));
+
+			$target_dir = "assets/img/"; 
+			$target_file = $target_dir . basename($_FILES["image"]["name"]); 
+			$uploadOk = 1;
+			$imageFileType = pathinfo($target_file,PATHINFO_EXTENSION); 
+			// Check if image file is a actual image or fake image
+		    $check = getimagesize($_FILES["image"]["tmp_name"]); 
+			if($check !== false) {
+				echo "File is an image - " . $check["mime"] . ".";
+				$uploadOk = 1;
+			    } else {
+			    	echo "File is not an image.";
+			    	$uploadOk = 0;
+			    }
+			// Check if file already exists
+			if (file_exists($target_file)) {
+				echo "Sorry, file already exists.";
+				$uploadOk = 0;
+			}
+			// Check file size
+			if ($_FILES["image"]["size"] > 5242880) {
+				echo "Sorry, your file is too large.";
+				$uploadOk = 0;
+			}
+			// Allow certain file formats
+			if($imageFileType != "jpg" && $imageFileType != "png" && $imageFileType != "jpeg"
+				&& $imageFileType != "gif" ) {
+				echo "Sorry, only JPG, JPEG, PNG & GIF files are allowed.";
+				$uploadOk = 0;
+		    }
+			// Check if $uploadOk is set to 0 by an error
+			if ($uploadOk == 0) {
+				echo "Sorry, your file was not uploaded.";
+				// if everything is ok, try to upload file
+		    } else {
+				if (move_uploaded_file($_FILES["image"]["tmp_name"], $target_file)) {
+					echo "The file ". basename( $_FILES["image"]["name"]). " has been uploaded.";
+				} else {
+				        echo "Sorry, there was an error uploading your file.";
+			    }
+
+			}  
+
+	        $sql = "INSERT INTO user_news (tittle, image, news_date, description) 
+	        VALUES ('".$tittle."', '".$image."', '".$news_from_date."', '".$description."' )";
 
 	        if ($conn->query($sql) === TRUE) {
 	        	$id = mysqli_insert_id($conn);
@@ -279,7 +326,101 @@
 				header("Location: news_view.php?id={$id}"); /* Redirect browser */
 				exit(); 
 		}
+		
+		/*Update news*/
+		else if (isset($_POST['updateNews'])) 
+		{
+			$news_id     = $_POST['id'];
+			$tittle      = $_POST['tittle'];
+			$image       = $_FILES['image']['name'];
+			$description = $_POST['description'];
+	        $news_date   = $_POST['news_date'] ;		
+
+	        $news_from_date = date('Y-m-d', strtotime( $news_date ));
+
+	        $target_dir = "assets/img/"; 
+			$target_file = $target_dir . basename($_FILES["image"]["name"]); 
+			$uploadOk = 1;
+			$imageFileType = pathinfo($target_file,PATHINFO_EXTENSION); 
+			// Check if image file is a actual image or fake image
+		    $check = getimagesize($_FILES["image"]["tmp_name"]); 
+			if($check !== false) {
+				echo "File is an image - " . $check["mime"] . ".";
+				$uploadOk = 1;
+			    } else {
+			    	echo "File is not an image.";
+			    	$uploadOk = 0;
+			    }
+			// Check if file already exists
+			/*if (file_exists($target_file)) {
+				echo "Sorry, file already exists.";
+				$uploadOk = 0;
+			}*/
+			// Check file size
+			if ($_FILES["image"]["size"] > 5242880) {
+				echo "Sorry, your file is too large.";
+				$uploadOk = 0;
+			}
+			// Allow certain file formats
+			if($imageFileType != "jpg" && $imageFileType != "png" && $imageFileType != "jpeg"
+				&& $imageFileType != "gif" ) {
+				echo "Sorry, only JPG, JPEG, PNG & GIF files are allowed.";
+				$uploadOk = 0;
+		    }
+			// Check if $uploadOk is set to 0 by an error
+			if ($uploadOk == 0) {
+				echo "Sorry, your file was not uploaded.";
+				// if everything is ok, try to upload file
+		    } else {
+				if (move_uploaded_file($_FILES["image"]["tmp_name"], $target_file)) {
+					echo "The file ". basename( $_FILES["image"]["name"]). " has been uploaded.";
+				} else {
+				        echo "Sorry, there was an error uploading your file.";
+			    }
+			}
+
+	        $query = "UPDATE user_news SET  tittle = '".$tittle."', image = '".$image."', news_date = '".$news_from_date."', description = '".$description."' WHERE id = '".$news_id."'";
+			$result = $conn->query($query);
+		    $row_count =  mysqli_affected_rows($conn); 
+			if($row_count > 0 )
+			{
+	            header("location: news_view.php");
+	        } else{
+	        	header("location: news_edit.php?news_id={$news_id}");
+	        }
+		}
+
+		/*Bill Upload*/
+		else if(isset($_POST['billUploadBtn'])) 
+    	{
+    		
+    		$folder = "assets/bill/";
+
+			move_uploaded_file($_FILES["bill_file_path"]["tmp_name"] , "$folder".$_FILES["bill_file_path"]["name"]);
+
+    		$user_name = $_POST['user_name'];
+    		$bill_name = $_POST['bill_name'] ;
+    		$bill_date   = $_POST['bill_date'] ;
+    		$bill_amount     = $_POST['bill_amount'] ;
+    		$bill_file_path   = $_FILES["bill_file_path"]["name"];
+    		$bill_description     = $_POST['bill_description'];
+    		
+    		$bill_from_date = date('Y-m-d', strtotime( $bill_date ));
+		     
+    		$query = "INSERT INTO user_bill (user_name, bill_name, bill_date, bill_amount, bill_file_path, bill_description) VALUES ('".$user_name."','".$bill_name."', '".$bill_from_date."', '".$bill_amount."', '".$bill_file_path."', '".$bill_description."')";
+			if ($conn->query($query) === TRUE) {
+					$id = mysqli_insert_id($conn);
+				} else {
+					echo "Error: " . $query . "<br>" . $conn->error;
+				}
+				$conn->close();
+				header("Location: bill_view.php?id={$id}"); /* Redirect browser */
+				exit();
+  		}
 	}
+
+
+
   	/* employee delete */
   	elseif(isset($_GET['id']))
 	{
@@ -290,6 +431,7 @@
 		$result = $conn->query($query);
 		header("location: employee_view.php");
 	}
+	/*policy delete*/
 	elseif(isset($_GET['id']))
 	{
 
@@ -299,7 +441,16 @@
 		$result = $conn->query($query);
 		header("location: policy_view.php");
 	} 
+	/*news delete*/
+	elseif(isset($_GET['news_id']))
+	{
 
+		$news_id = $_GET['news_id'];
+		$query = "UPDATE user_news SET status = 0 WHERE id = '$news_id'";
+
+		$result = $conn->query($query);
+		header("location: news_view.php");
+	}
 	elseif(isset($_GET['download_file']))
 	{
 		header("Content-Type: application/octet-stream");

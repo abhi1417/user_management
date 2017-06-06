@@ -17,7 +17,7 @@ include("includes/sidebar.php");
                     		<div class="form-group">
                     			<label for="policy_type" class="col-sm-3 control-label">Policy Name *</label>
     			                <div class="col-xs-4">
-                			    	<input type="text" id="policy_type" placeholder="File Name" value="" name="policy_type" class="form-control ">
+                			    	<input type="text" id="policy_type" placeholder="Policy Name" value="" name="policy_type" class="form-control ">
                     			</div>
             				</div>
                             <div class="form-group">
@@ -66,6 +66,8 @@ $('#datepicker1').datepicker({
 $('#datepicker2').datepicker({
     orientation: 'auto bottom'
 });
+$("#datepicker1").datepicker().datepicker("setDate", new Date());
+$("#datepicker2").datepicker().datepicker("setDate", new Date());
 $(function () {
         $("#chkPdf").click(function () {
             if ($(this).is(":checked")) {
@@ -85,5 +87,6 @@ $(function () {
             } 
         });
     });
+
     
 </script>

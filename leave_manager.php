@@ -92,7 +92,7 @@ include("includes/sidebar.php");
                                 </div>
                             </div>
                             <div class="form-group text-left m-b-0">
-                                    <button class="btn btn-primary waves-effect waves-light" type="submit" name="apply" id="submit">
+                                    <button class="btn btn-primary waves-effect waves-light" type="submit" name="applyLeave" id="submit">
                                         Apply
                                     </button>
                                 </div>  

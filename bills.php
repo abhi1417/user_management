@@ -58,7 +58,7 @@ include("includes/sidebar.php");
                             <div class="form-group ">
                                 <label for="bill_description" class="col-sm-3 control-label">Bill Description *</label>  
                                 <div class="col-xs-4" >
-                                    <textarea class="form-control " name="bill_description" value="" rows="10" cols="50" minlength="5" maxlength="100" id="bill_description"></textarea>
+                                    <textarea class="form-control " name="bill_description" value="" rows="10" cols="50" minlength="5" maxlength="100" placeholder="Members/Place/Bill Type" id="bill_description"></textarea>
                                 </div>
                             </div>
                             <div class="form-group">

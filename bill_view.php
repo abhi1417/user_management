@@ -2,6 +2,7 @@
 include("includes/dbConnection.php");
 include("includes/header.php");
 ?>
+
 <div class="container">                                               
     <div class="row">
         <div class="col-lg-12">
@@ -12,17 +13,22 @@ include("includes/header.php");
                             <label class="col-sm-3 control-label" for="example-input-small">Month<span class="text-danger">*</span></label>
                             <div class="col-sm-2"></div>
                             <div class="col-sm-6">
-                                <select id="bill_date" name="bill_date" class="form-control input-sm">    
-                                 <option value="">Select Month</option>
-                                 <option value="last_month">Last Month</option>
-                                 <option value="last_6_month">Last 6 Month</option>
-                                 <option value="this_year">This Year</option>
-                                 <option value="last_year">Last Year</option>
-                                 <option value="custom">Custom</option>
-                             </select>
-                         </div>
-                     </div>
-                     <div class="form-group" id="custom_date" style="display:none;">
+                                   <?php 
+                                      $bill = isset($_GET['bill_date']) ? $_GET['bill_date']:'';
+                                   ?>
+                                <select id="bill_date" name="bill_date" class="form-control input-sm drop">    
+                                   <option value="">Select Month</option>
+                                   <option value="this_month" <?php if ($bill =="this_month") echo 'selected = "selected"';?>>This Month</option>
+                                   <option value="last_month" <?php if ($bill =="last_month") echo 'selected = "selected"';?>>Last Month</option>
+                                   <option value="last_3_month" <?php if ($bill =="last_3_month") echo 'selected = "selected"';?>>Last 3 Month</option>
+                                   <option value="last_6_month" <?php if ($bill =="last_6_month") echo 'selected = "selected"';?>>Last 6 Month</option>
+                                   <option value="this_year" <?php if ($bill =="this_year") echo 'selected = "selected"';?>>This Year</option>
+                                   <option value="last_year" <?php if ($bill =="last_year") echo 'selected = "selected"';?>>Last Year</option>
+                                   <option value="custom" <?php if ($bill =="custom") echo 'selected = "selected"';?>>Custom</option>
+                                </select>
+                           </div>
+                       </div>
+                       <div class="form-group" id="custom_date" style="display:none;">
                         <label class="col-sm-3 control-label" for="example-input-small">Date<span class="text-danger">*</span></label>
                         <div class="col-sm-2"></div>
                         <div class="col-sm-6">
@@ -37,12 +43,16 @@ include("includes/header.php");
                         <label class="col-sm-3 control-label" for="example-input-small">Status<span class="text-danger">*</span></label>
                         <div class="col-sm-2"></div>
                         <div class="col-sm-6">
-                            <select id="status" name="status" class="form-control input-sm">                                         
-                                <option value="1">Approved</option>                                        
-                                <option value="0">UnApproved</option>                                        
+                            <?php 
+                               $statusApp = isset($_GET['status']) ? $_GET['status']:'';
+                            ?>
+                            <select id="status" name="status" class="form-control input-sm drop">                                         
+                                <option value="">Select Status</option>                                        
+                                <option <?php if ($statusApp =="1") echo 'selected = "selected"';?> value="1">Approved</option>                                        
+                                <option <?php if ($statusApp =="0") echo 'selected = "selected"';?> value="0">UnApproved</option>                                        
                             </select>
                             <label class="control-label" for="example-input-small">
-                                <button type="submit" name="searchBtnBill" value="Upload PDF" id="submit" class="btn btn-primary input-sm">Search</button>
+                                <button type="submit" name="searchBtnBill" value="Upload PDF" id="submitBill" class="btn btn-primary input-sm" disabled>Search</button>
                             </label>
                         </div>
                     </div>  
@@ -52,23 +62,52 @@ include("includes/header.php");
     </div><!-- Col-md-12 end-->
     <?php
 
-    $query  = "SELECT * FROM user_bill ";
+
+
+    $query  = "SELECT * FROM user_bill WHERE status ='1' ";
     $where = '';
     $currentMonth = '';
-    if(isset($_GET['searchBtnBill']))
+    $status = '';
+
+     if(isset($_GET['searchBtnBill']))
     {   
-        $currentMonth = Date('m', strtotime($currentMonth . " last month"));
-        $prevyear = date('Y');
+        $currentDate = Date('d');
+        $currentYear = date('Y');
+        $previousYear = $currentYear - 1;
         $month = $_GET['bill_date'];
         $status = $_GET['status'];
 
-        if($month == 'last_month'){
-            /*$where = ' where `bill_date` >= DATE_SUB(CURDATE(), INTERVAL 1 MONTH)';*/
-            $where = ' where Month(bill_date) = "'.$currentMonth.'" AND Year(bill_date) = "'.$prevyear.'";';
+        if($month == 'this_month'){
+            $where = ' AND bill_date >=(CURDATE()-INTERVAL 1 MONTH);';
         }
-    }
+        else if($month == 'last_month'){
+            $currentMonth = Date('m', strtotime($currentMonth . " last month"));
+            $where = ' AND Month(bill_date) = "'.$currentMonth.'" AND Year(bill_date) = "'.$currentYear.'"';
+        }
+        else if($month == 'last_3_month'){
+            $where = ' AND `bill_date` <= last_day(now()) + interval 1 day - interval 1 month  AND `bill_date` >= last_day(now()) + interval 1 day - interval 4 month';
+        }
+        else if($month == 'last_6_month'){
+            $where = ' AND `bill_date` <= last_day(now()) + interval 1 day - interval 1 month  AND `bill_date` >= last_day(now()) + interval 1 day - interval 7 month';
+        }
+        else if($month == 'this_year'){
+            $where = ' AND YEAR(bill_date) = YEAR(CURDATE())'; 
+        }
+        else if($month == 'last_year'){
+            $where = ' AND year(bill_date) = "'.$previousYear.'"';
+        }
+        else if($month == 'custom'){
+            $custom_from = $_GET['custom_from'];
+            $custom_to = $_GET['custom_to'];   
+
+            $custom_from_date = date('Y-m-d', strtotime( $custom_from ));      
+            $custom_to_date = date('Y-m-d', strtotime( $custom_to ));
+            $where = '  bill_date BETWEEN "'.$custom_from_date.'" and "'.$custom_to_date.'"';
+        }
+    } 
     
-     $main_query = $query . $where;
+
+    echo $main_query = $query . $where;
 
     $result = $conn->query($main_query);
 
@@ -108,8 +147,8 @@ include("includes/header.php");
                                 <td><?php echo $row['bill_file_path']; ?></td> 
                                 <td><?php echo $row['bill_description']; ?></td> 
                                 <td><?php echo $msg; ?></td>  
-                                <td>&nbsp;&nbsp;<a href="bill_edit.php?id=<?php echo $row['id'];?>"><i class="glyphicon glyphicon-eye-open"></i></a>&nbsp;&nbsp; 
-                                    &nbsp;&nbsp;<a href="action.php?id=<?php echo $row['id']; ?>" class="delete"><i class="glyphicon glyphicon-trash"></i></a>
+                                <td>&nbsp;&nbsp;<a href="bill_edit.php?bill_id=<?php echo $row['id'];?>"><i class="glyphicon glyphicon-eye-open"></i></a>&nbsp;&nbsp; 
+                                    &nbsp;&nbsp;<a href="action.php?bill_id=<?php echo $row['id']; ?>" class="delete"><i class="glyphicon glyphicon-trash"></i></a>
                                 </td> 
                             </tr>
                             <?php
@@ -137,5 +176,17 @@ $('#bill_date').on('change', function (e) {
     {
         $('#custom_date').hide();
     }
+});
+$('.drop').on('change', function (e) {
+  var selectDrop = $('option:selected',this).val();
+  //alert(selectDrop);
+  if(selectDrop == "")
+  {
+    $('#submitBill').prop('disabled', true);
+  } 
+  else
+  {
+    $('#submitBill').prop('disabled', false);
+  }
 });
 </script>

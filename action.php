@@ -451,6 +451,15 @@
 		$result = $conn->query($query);
 		header("location: news_view.php");
 	}
+	elseif(isset($_GET['bill_id']))
+	{
+
+		$bill_id = $_GET['bill_id'];
+		$query = "UPDATE user_bill SET status = 0 WHERE id = '$bill_id'";
+
+		$result = $conn->query($query);
+		header("location: bill_view.php");
+	}
 	elseif(isset($_GET['download_file']))
 	{
 		header("Content-Type: application/octet-stream");

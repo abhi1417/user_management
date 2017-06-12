@@ -29,10 +29,36 @@
                                         <li><a href="employee_edit.php">Employee Edit</a></li>
                                     </ul>
                                 </li>
-                                <li><a href="leave_manager.php">Leave Manager</a></li>
-                                <li><a href="news_section.php">News Section</a></li>
-                                <li><a href="policy.php">Policy</a></li>
-                                <li><a href="bills.php">Bills</a></li>
+                                <li>
+                                    <a href="javascript: void(0);" aria-expanded="true">Leave Manage <span class="fa arrow"></span></a>
+                                    <ul class="nav-second-level nav" aria-expanded="true">
+                                        <li><a href="laeve_manager.php">Employee Registration</a></li>
+                                    </ul>
+                                </li>
+                                <li>
+                                    <a href="javascript: void(0);" aria-expanded="true">News Section <span class="fa arrow"></span></a>
+                                    <ul class="nav-second-level nav" aria-expanded="true">
+                                        <li><a href="news_section.php">NEWS Registration</a></li>
+                                        <li><a href="news_view.php">NEWS View</a></li>
+                                        <li><a href="news_edit.php">NEWS Edit</a></li>
+                                    </ul>
+                                </li>
+                                <li>
+                                    <a href="javascript: void(0);" aria-expanded="true">Policy <span class="fa arrow"></span></a>
+                                    <ul class="nav-second-level nav" aria-expanded="true">
+                                        <li><a href="policy.php">policy Registration</a></li>
+                                        <li><a href="policy_edit.php">policy View</a></li>
+                                        <li><a href="policy_view.php">policy Edit</a></li>
+                                    </ul>
+                                </li>
+                                <li>
+                                    <a href="javascript: void(0);" aria-expanded="true">Bills <span class="fa arrow"></span></a>
+                                    <ul class="nav-second-level nav" aria-expanded="true">
+                                        <li><a href="bill.php">Bills Registration</a></li>
+                                        <li><a href="bill_view.php">Bills Profile</a></li>
+                                        <li><a href="bill_view.php">Bills View</a></li>
+                                    </ul>
+                                </li>                                
                             </ul>
                         </div>
                     </div><!--Scrollbar wrapper-->

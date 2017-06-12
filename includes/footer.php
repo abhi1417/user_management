@@ -20,6 +20,7 @@
         <script src="assets/plugins/clockpicker/js/bootstrap-clockpicker.min.js"></script>
         <script src="assets/plugins/bootstrap-daterangepicker/daterangepicker.js"></script>
         <script src="assets/plugins/summernote/summernote.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/parsley.js/2.7.2/parsley.js"></script>
 
         <!-- form advanced init js -->
         <script src="assets/pages/jquery.form-advanced.init.js"></script>

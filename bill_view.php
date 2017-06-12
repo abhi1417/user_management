@@ -107,7 +107,7 @@ include("includes/header.php");
     } 
     
 
-    echo $main_query = $query . $where;
+    $main_query = $query . $where;
 
     $result = $conn->query($main_query);
 

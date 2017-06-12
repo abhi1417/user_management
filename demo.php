@@ -823,9 +823,97 @@ $('#bill_date').on('change', function (e) {
 });
 </script>
 
+<!--   $query_file_path = "SELECT bill_file_path FROM user_bill WHERE id = '$bill_id'";            
+            $result_file_path = $conn->query($query_file_path);
+            $row_file_path = mysqli_fetch_array($result_file_path);
+            
+            if (mysqli_num_rows($result_file_path) > 0 ) {
+                $msg = "This PDF is already exists"; 
+                 
+                header("location: bill_edit.php?msg={$msg}");
+            }
+
+if (($file_size > 5242880)){      
+                    $msg_size = 'File too large. File must be less than 5 Megabytes.';  
+                    header("location: bill_edit.php");          
+                }
+                else if (($file_type != "application/pdf")){
+                    $msg_size = 'Invalid file type. Only PDF types are accepted.'; 
+                    header("location: bill_edit.php");          
+                }
+
+                $file_size = $_FILES['bill_file_path']['size']; 
+            $file_type = $_FILES['bill_file_path']['type']; 
+
+            $bill_from_date = date('Y-m-d', strtotime( $bill_date ));
+            
+            if(!empty($bill_file_path))
+            {
+
+            $bill_file = $_FILES['bill_file_path']['name'];
+
+            
+           
+            //print_r($_FILES);
+            } else {
 
 
+            else if(isset($_POST['billUpdatBtn']))
+        {   
+            $bill_id           = $_POST['id'];
+            $user_name         = $_POST['user_name'];  
+            $bill_name         = $_POST['bill_name'];  
+            $bill_date         = $_POST['bill_date'];
+            $bill_amount       = $_POST['bill_amount'];
+            $bill_file_path    = $_FILES["bill_file_path"]["name"];
+            $bill_description  = $_POST['bill_description'];
 
+            $bill_from_date = date('Y-m-d', strtotime( $bill_date ));
+            
+            if(!empty($bill_file_path))
+            {
+
+            $bill_file = $_FILES['bill_file_path']['name'];
+
+            $folder = "assets/pdf/";
+            $file_size = $_FILES['bill_file_path']['size']; 
+            $file_type = $_FILES['bill_file_path']['type']; 
+            
+          /*    $query_file_path = "SELECT bill_file_path FROM user_bill WHERE id = '$bill_id'";            
+            $result_file_path = $conn->query($query_file_path);
+            $row_file_path = mysqli_fetch_array($result_file_path);
+            
+            if (mysqli_num_rows($result_file_path) > 0 ) {
+                $msg = "This PDF is already exists";                 
+                header("location: bill_edit.php?msg={$msg}");
+            }*/
+
+            print_r($_FILES);die;
+                if (($file_size > 5242880)){      
+                    $msg_size = 'File too large. File must be less than 5 Megabytes.';  
+                    header("location: bill_edit.php");          
+                }
+                else if (($file_type != "application/pdf")){
+                    $msg_size = 'Invalid file type. Only PDF types are accepted.'; 
+                    header("location: bill_edit.php");          
+                }    
+               move_uploaded_file($_FILES["bill_file_path"]["tmp_name"] , "$folder".$_FILES["bill_file_path"]["name"]);
+            } else {
+                echo $query = "UPDATE user_bill SET user_name ='".$user_name."', bill_name ='".$bill_name."', bill_date ='".$bill_from_date."', bill_amount ='".$bill_amount."', bill_file_path = '".$bill_file."', bill_description ='".$bill_description."'  WHERE id = '".$bill_id."'"; 
+
+                $result = $conn->query($query);
+                $row_count =  mysqli_affected_rows($conn); 
+                if($row_count > 0 )
+                {
+                    header("location: bill_view.php");
+                } else{
+                    header("location: bill_edit.php?bill_id={$bill_id}");
+                }
+            }
+        }
+    }
+
+ -->
 
 
 

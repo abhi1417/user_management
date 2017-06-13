@@ -6,11 +6,12 @@ if ($_POST) {
 	/* Employee Registration */
 	if(isset($_POST['registrationBtn']))
 	{	
-		$employee_id       	 = 'FxB'.'-'.$_POST['employee_id'];
+
+		$employee_id         ='FxB'.'-'.$_POST['employee_id'];
 		$first_name       	 = $_POST['first_name'];
 		$last_name        	 = $_POST['last_name'];
 		$email            	 = $_POST['email'];
-		$password         	 = md5($_POST['password']);
+		$password    	     = md5($_POST['password']);
 		$personal_number  	 = $_POST['personal_number'];
 		$emergency_number 	 = $_POST['emergency_number'];
 		$residental_address  = $_POST['residental_address'];
@@ -24,7 +25,7 @@ if ($_POST) {
 		$education        	 = $_POST['education'];
 		$state            	 = $_POST['state'];
 		$city             	 = $_POST['city'];
-		$nationality      	 = $_POST['nationality']; 
+		$nationality     	 = $_POST['nationality']; 
 		$joining_date     	 = $_POST['joining_date'];
 		$bond             	 = $_POST['bond'];
 		$bond_duration_from  = $_POST['bond_duration_from'];
@@ -34,6 +35,39 @@ if ($_POST) {
 		$joining_date = date('Y-m-d', strtotime( $joining_date ));
 		$bond_duration_from_date = date('Y-m-d', strtotime( $bond_duration_from ));
 		$bond_duration_to_date = date('Y-m-d', strtotime( $bond_duration_to ));
+
+
+		$cookie_ary  = array('employee_id'=>$employee_id,
+										'first_name'=>$first_name,
+										'last_name'=>$last_name,
+										'email'=>$email,
+										'password'=>$password,
+										'personal_number'=>$personal_number,
+										'emergency_number'=>$emergency_number,
+										'residental_address'=>$residental_address,
+										'home_address'=>$home_address,
+										'marital_status'=>$marital_status,
+										'gender'=>$gender,
+										'date_of_birth'=>$birth_date,
+										'role_type'=>$role_type,
+										'employee_role'=>$employee_role,
+										'project_team'=>$project_team,
+										'education'=>$education,
+										'state'=>$state,
+										'city'=>$city,
+										'nationality'=>$nationality,
+										'joining_date'=>$joining_date,
+										'bond'=>$bond,
+										'bond_duration_from'=>$bond_duration_from_date,
+				
+										'bond_duration_to'=>$bond_duration_to_date
+							);
+		//echo '<pre>';
+		setcookie('registration1', json_encode($cookie_ary));
+		//print_r($_COOKIE);die;
+		//setcookie($cookie_name, $cookie_value, time() + (86400 * 30), "/"); 
+
+
 		
 		$query_mail = "SELECT email FROM user_employee WHERE email = '$email'";						
 		$result_email = $conn->query($query_mail);
@@ -49,15 +83,15 @@ if ($_POST) {
 
 		if (mysqli_num_rows($result_email) > 0) {
 			$msg_email = "This Email address is already exists";
-			header("location: employee_reg.php?msg_email={$msg_email}");
+			// header("location: employee_reg.php?msg_email={$msg_email}");
 
 		} else if (mysqli_num_rows($result_employee_id) > 0 ) {
-			$msg_employee_id = "This Employee ID is already exists"; 
-			header("location: employee_reg.php?msg_employee_id={$msg_employee_id}");
+			$msg_employee_id = "This Employee ID is already exists"; 			
+			// header("location: employee_reg.php?msg_employee_id={$msg_employee_id}");
 		
 		} else if (mysqli_num_rows($result_personal_number) > 0) {
 			$msg_personal_num = "This number is already exists";
-			header("location: employee_reg.php?msg_personal_num={$msg_personal_num}");
+			// header("location: employee_reg.php?msg_personal_num={$msg_personal_num}");
 
 		}
 
@@ -68,11 +102,18 @@ if ($_POST) {
 			VALUES ('$employee_id','$first_name', '$last_name', '$email', '$password','$personal_number', '$emergency_number', '$residental_address', '$home_address', '$marital_status', '$gender', '$birth_date', '$role_type', '$employee_role', '$project_team', '$education', '$state', '$city', '$nationality', '$joining_date', '$bond', '$bond_duration_from_date', '$bond_duration_to_date')";
 			if ($conn->query($sql) === TRUE) {
 				$id = mysqli_insert_id($conn);
+				if(isset($_COOKIE['registration']) && $_COOKIE['registration']!= "" ){
+			   
+			    
+			    unset($_COOKIE['registration1']);
+
+				}
+
 			} else {
 				echo "Error: " . $sql . "<br>" . $conn->error;
 			}
 			$conn->close();
-			header("Location: employee_profile.php?id={$id}"); /* Redirect browser */
+			header("Location: employee_reg.php"); /* Redirect browser */
 			exit();
 		}
 	}	

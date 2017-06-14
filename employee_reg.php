@@ -7,7 +7,7 @@ if(!isset($_SESSION['email']) || $_SESSION['email']=="")
     header("location: login.php");
 }
 include("includes/header.php");
-include("includes/sidebar.php");
+include("includes/sidebar.php"); 
 
 $string = $var['employee_id'];
 $newstring = str_replace("FxB-", "", $string);

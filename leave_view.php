@@ -106,8 +106,8 @@ if (!empty($emp_id)){
                             <td><?php echo $diff; ?></td> 
                             <td><?php echo $row['status']; ?></td>  
                             <td><?php echo $row['comment']; ?></td> 
-                            <td>&nbsp;&nbsp;<a href="employee_profile.php?id=<?php echo $row['id'];?>"><i class="glyphicon glyphicon-eye-open"></i></a>&nbsp;&nbsp; 
-                                &nbsp;&nbsp;<a href="action.php?id=<?php echo $row['id']; ?>" class="delete"><i class="glyphicon glyphicon-trash"></i></a>
+                            <td><!-- &nbsp;&nbsp;<a href="leave_edit.php?leave_id=<?php echo $row['id'];?>"><i class="glyphicon glyphicon-eye-open"></i></a>&nbsp;&nbsp;  -->
+                                &nbsp;&nbsp;<a href="action.php?leave_id=<?php echo $row['id']; ?>" class="delete"><i class="glyphicon glyphicon-trash"></i></a>
                             </td> 
                         </tr>
                         <?php

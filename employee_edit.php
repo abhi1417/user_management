@@ -1,4 +1,5 @@
-<?php  
+<?php 
+ 
 session_start();
 include("includes/dbConnection.php");
   if(!isset($_SESSION['id']) || $_SESSION['id']=="")
@@ -21,6 +22,7 @@ include("includes/sidebar.php");
     $first_name         = $rows['first_name'];  
     $last_name          = $rows['last_name'];
     $email              = $rows['email'];
+    $password              = $rows['password'];
     $personal_number    = $rows['personal_number'];
     $emergency_number   = $rows['emergency_number'];
     $residental_address = $rows['residental_address'];
@@ -315,6 +317,12 @@ include("includes/sidebar.php");
                                     <label for="email">Email address<span class="text-danger">*</span></label>
                                     <input type="email" name="email" parsley-trigger="change" required
                                            placeholder="Enter email" class="form-control" id="email" value="<?php  echo isset($email)?$email:''; ?>">
+                                           <span class="error"><?php if(isset($_GET["msg"])) { echo $_GET["msg"]; } ?></span>
+                                </div>  
+                                <div class="form-group col-lg-6">
+                                    <label for="password">Password<span class="text-danger">*</span></label>
+                                    <input type="password" name="password" parsley-trigger="change" required
+                                           placeholder="Enter password" class="form-control" id="password" value="<?php  echo isset($password)?$password:''; ?>">
                                            <span class="error"><?php if(isset($_GET["msg"])) { echo $_GET["msg"]; } ?></span>
                                 </div>                               
                                 <div class="form-group col-lg-6">

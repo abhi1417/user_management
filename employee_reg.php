@@ -1,14 +1,16 @@
 <?php
 session_start();
-$var=json_decode($_COOKIE['registration1'],true);    
+$var=json_decode($_COOKIE['registration'],true);    
 include("includes/dbConnection.php");
 if(!isset($_SESSION['id']) || $_SESSION['id']=="")
 {
     header("location: login.php");
 }
 include("includes/header.php");
-//include("includes/sidebar.php");
+include("includes/sidebar.php");
 
+$string = $var['employee_id'];
+$newstring = str_replace("FxB-", "", $string);
 
 ?>
 
@@ -50,7 +52,7 @@ include("includes/header.php");
                                     <label class="control-label" for="example-input1-group1">Employee Id</label>
                                     <div class="input-group">
                                         <span class="input-group-addon">FxB</span>
-                                        <input type="text" id="employee_id" name="employee_id" class="form-control" placeholder="Id" value="<?php if(isset($var['employee_id'])){ echo $var['employee_id']; }?>">
+                                        <input type="text" id="employee_id" name="employee_id" class="form-control" placeholder="Id" value="<?php echo $newstring; ?>">
                                         <span class="error"><?php if(isset($_GET["msg_employee_id"])) { echo $_GET["msg_employee_id"]; } ?></span>
                                     </div>
                                 </div> 
@@ -269,7 +271,7 @@ include("includes/header.php");
                                     </div>
                                 </div>
 
-                                <div class="form-group">
+                                <div class="form-group col-lg-6">
                                     <label for="joining_date">Joining Date<span class="text-danger">*</span></label>
                                     <div>
                                         <div class="input-group">
@@ -333,3 +335,9 @@ include("includes/header.php");
 
     </body>
     </html>
+<script>
+$("#datepicker-autoclose").datepicker().datepicker("setDate", new Date());
+$("#datepicker").datepicker().datepicker("setDate", new Date());
+$("#bond_duration_from").datepicker().datepicker("setDate", new Date());
+$("#bond_duration_to").datepicker().datepicker("setDate", new Date());
+</script>

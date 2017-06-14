@@ -19,7 +19,7 @@
 
                             <!-- Left Menu Start -->
                             <ul class="metisMenu nav" id="side-menu">
-                                <li><a href="index.html"><i class="ti-home"></i> Dashboard </a></li>
+                                <li><a href="index.php"><i class="ti-home"></i> Dashboard </a></li>
                                 <li>
                                     <a href="javascript: void(0);" aria-expanded="true">Employee <span class="fa arrow"></span></a>
                                     <ul class="nav-second-level nav" aria-expanded="true">
@@ -32,7 +32,7 @@
                                 <li>
                                     <a href="javascript: void(0);" aria-expanded="true">Leave Manage <span class="fa arrow"></span></a>
                                     <ul class="nav-second-level nav" aria-expanded="true">
-                                        <li><a href="laeve_manager.php">Employee Registration</a></li>
+                                        <li><a href="leave_manager.php">Leave Manager</a></li>
                                     </ul>
                                 </li>
                                 <li>

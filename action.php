@@ -1,6 +1,44 @@
 <?php
 session_start();
 include("includes/dbConnection.php");
+ /*ini_set("SMTP", "aspmx.l.google.com");
+    ini_set("sendmail_from", "kothari.abhishek@fxbytes.com");
+function send_mail($employee_id,$first_name,$email,$password)
+{   
+    $from='kothari.abhishek@fxbytes.com';
+    $headers = '';
+    $headers .= "From: $from\n";
+    $headers .= "Reply-to: $from\n";
+    $headers .= "Return-Path: $from\n";
+    $headers .= "Message-ID: <" . md5(uniqid(time())) . "@" . $_SERVER['SERVER_NAME'] . ">\n";
+    $headers .= "Date: " . date('r', time()) . "\n";
+    $headers = "MIME-Version: 1.0" . "\r\n";
+    $headers .= "Content-type:text/html;charset=iso-8859-1" . "\r\n";
+
+    $subject = "Welcome!";
+   $message = "
+    <p></p><br>
+    Hi ".$first_name."<br>
+   You are successfully registering for the Fxbytes group.<br><br>
+   Your ID is ".$employee_id."<br>
+   Login using your email id : ".$email." and,<br>
+   your password : ".$password."<br><br>";
+
+  mail($email,$subject,$message,$headers);
+
+}*/
+/*$to      = 'jain.gourav2@mailinator.com';
+$subject = 'Fake sendmail test';
+$message = 'If we can read this, it means that our fake Sendmail setup works!';
+$headers = 'From: abhik1424@gmail.com' . "\r\n" .
+           'Reply-To: abhik1424@gmail.com' . "\r\n" .
+           'X-Mailer: PHP/' . phpversion();
+
+if(mail($to, $subject, $message, $headers)) {
+    echo 'Email sent successfully!';
+} else {
+    die('Failure: Email was not sent!');
+}*/
 if ($_POST) {
 	
 	/* Employee Registration */
@@ -31,44 +69,37 @@ if ($_POST) {
 		$bond_duration_from  = $_POST['bond_duration_from'];
 		$bond_duration_to    = $_POST['bond_duration_to'];
 
+		$cookie_ary  = array('employee_id'=>$employee_id,
+							 'first_name'=>$first_name,
+							 'last_name'=>$last_name,
+							 'email'=>$email,
+							 'password'=>$password,
+							 'personal_number'=>$personal_number,
+							 'emergency_number'=>$emergency_number,
+							 'residental_address'=>$residental_address,
+							 'home_address'=>$home_address,
+							 'marital_status'=>$marital_status,
+							 'gender'=>$gender,
+							 'date_of_birth'=>$date_of_birth,
+							 'role_type'=>$role_type,
+							 'employee_role'=>$employee_role,
+							 'project_team'=>$project_team,
+							 'education'=>$education,
+							 'state'=>$state,
+							 'city'=>$city,
+							 'nationality'=>$nationality,
+							 'joining_date'=>$joining_date,
+							 'bond'=>$bond,
+							 'bond_duration_from'=>$bond_duration_from,
+                             'bond_duration_to'=>$bond_duration_to
+							);
+		setcookie('registration', json_encode($cookie_ary), time() + 80000, '/');
+					
 		$birth_date  = date('Y-m-d', strtotime( $date_of_birth ));
 		$joining_date = date('Y-m-d', strtotime( $joining_date ));
 		$bond_duration_from_date = date('Y-m-d', strtotime( $bond_duration_from ));
 		$bond_duration_to_date = date('Y-m-d', strtotime( $bond_duration_to ));
 
-
-		$cookie_ary  = array('employee_id'=>$employee_id,
-										'first_name'=>$first_name,
-										'last_name'=>$last_name,
-										'email'=>$email,
-										'password'=>$password,
-										'personal_number'=>$personal_number,
-										'emergency_number'=>$emergency_number,
-										'residental_address'=>$residental_address,
-										'home_address'=>$home_address,
-										'marital_status'=>$marital_status,
-										'gender'=>$gender,
-										'date_of_birth'=>$birth_date,
-										'role_type'=>$role_type,
-										'employee_role'=>$employee_role,
-										'project_team'=>$project_team,
-										'education'=>$education,
-										'state'=>$state,
-										'city'=>$city,
-										'nationality'=>$nationality,
-										'joining_date'=>$joining_date,
-										'bond'=>$bond,
-										'bond_duration_from'=>$bond_duration_from_date,
-				
-										'bond_duration_to'=>$bond_duration_to_date
-							);
-		//echo '<pre>';
-		setcookie('registration1', json_encode($cookie_ary));
-		//print_r($_COOKIE);die;
-		//setcookie($cookie_name, $cookie_value, time() + (86400 * 30), "/"); 
-
-
-		
 		$query_mail = "SELECT email FROM user_employee WHERE email = '$email'";						
 		$result_email = $conn->query($query_mail);
 		$row_email = mysqli_fetch_array($result_email);
@@ -80,49 +111,56 @@ if ($_POST) {
 		$query_personal_number = "SELECT personal_number FROM user_employee WHERE personal_number = '$personal_number'";			
 		$result_personal_number = $conn->query($query_personal_number);
 		$row_personal_number = mysqli_fetch_array($result_personal_number); 
+		/*echo "<pre>";
+		print_r($_POST);die;*/
 
 		if (mysqli_num_rows($result_email) > 0) {
 			$msg_email = "This Email address is already exists";
-			// header("location: employee_reg.php?msg_email={$msg_email}");
+			header("location: employee_reg.php?msg_email={$msg_email}");
 
 		} else if (mysqli_num_rows($result_employee_id) > 0 ) {
 			$msg_employee_id = "This Employee ID is already exists"; 			
-			// header("location: employee_reg.php?msg_employee_id={$msg_employee_id}");
-		
+			header("location: employee_reg.php?msg_employee_id={$msg_employee_id}");
+
 		} else if (mysqli_num_rows($result_personal_number) > 0) {
 			$msg_personal_num = "This number is already exists";
-			// header("location: employee_reg.php?msg_personal_num={$msg_personal_num}");
+			header("location: employee_reg.php?msg_personal_num={$msg_personal_num}");
 
 		}
-
-
+		
 		else {
-
-			$sql = "INSERT INTO user_employee (employee_id, first_name, last_name, email, password, personal_number, emergency_number, residental_address, home_address, marital_status, gender, date_of_birth, role_type, employee_role, project_team, education, state, city, nationality, joining_date, bond, bond_duration_from, bond_duration_to) 
+			
+			 $sql = "INSERT INTO user_employee 
+			(employee_id, first_name, last_name, email, password, personal_number, emergency_number, residental_address, home_address, marital_status, gender, date_of_birth, role_type, employee_role, project_team, education, state, city, nationality, joining_date, bond, bond_duration_from, bond_duration_to) 
 			VALUES ('$employee_id','$first_name', '$last_name', '$email', '$password','$personal_number', '$emergency_number', '$residental_address', '$home_address', '$marital_status', '$gender', '$birth_date', '$role_type', '$employee_role', '$project_team', '$education', '$state', '$city', '$nationality', '$joining_date', '$bond', '$bond_duration_from_date', '$bond_duration_to_date')";
+			/*$employee_id = $_POST['employee_id'];
+			$first_name = $_POST['first_name'];
+			$email = $_POST['email'];
+			$password = $_POST['password'];
+			send_mail($employee_id, $first_name,$email,$password);*/
+
+
 			if ($conn->query($sql) === TRUE) {
 				$id = mysqli_insert_id($conn);
-				if(isset($_COOKIE['registration']) && $_COOKIE['registration']!= "" ){
-			   
-			    
-			    unset($_COOKIE['registration1']);
-
-				}
+				//print_r($_COOKIE);
+				unset($_COOKIE['registration']); 
+				setcookie("registration", "", -1, '/');
+				
 
 			} else {
 				echo "Error: " . $sql . "<br>" . $conn->error;
 			}
+			header("Location: employee_profile.php?id={$id}"); /* Redirect browser */
 			$conn->close();
-			header("Location: employee_reg.php"); /* Redirect browser */
-			exit();
+			
 		}
 	}	
 
 	/*employe update*/
 	else if(isset($_POST['update']))
-	{
+	{	
+		
 		$id = $_POST['id'];
-
 		$first_name = $_POST['first_name'];
 		$last_name = $_POST['last_name'];
 		$email = $_POST['email'];
@@ -150,12 +188,12 @@ if ($_POST) {
 		$bond_duration_from_date = date('Y-m-d', strtotime( $bond_duration_from ));
 		$bond_duration_to_date = date('Y-m-d', strtotime( $bond_duration_to ));
 
-		$query = "UPDATE user_employee SET first_name = '$first_name', last_name = '$last_name', email = '$email', personal_number = '$personal_number', emergency_number = '$emergency_number', residental_address = '$residental_address', home_address = '$home_address', marital_status = '$marital_status', gender = '$gender', date_of_birth = '$birth_date', role_type = '$role_type', employee_role = '$employee_role', project_team = '$project_team', education = '$education', state = '$state', city = '$city', nationality = '$nationality', joining_date = '$joining_date', bond = '$bond', bond_duration_from = '$bond_duration_from_date', bond_duration_to = '$bond_duration_to_date' WHERE id = '$id'";
+		echo $query = "UPDATE user_employee SET first_name = '$first_name', last_name = '$last_name', email = '$email', personal_number = '$personal_number', emergency_number = '$emergency_number', residental_address = '$residental_address', home_address = '$home_address', marital_status = '$marital_status', gender = '$gender', date_of_birth = '$birth_date', role_type = '$role_type', employee_role = '$employee_role', project_team = '$project_team', education = '$education', state = '$state', city = '$city', nationality = '$nationality', joining_date = '$joining_date', bond = '$bond', bond_duration_from = '$bond_duration_from_date', bond_duration_to = '$bond_duration_to_date' WHERE id = '$id'";
 		$result = $conn->query($query);
 		$row_count =  mysqli_affected_rows($conn);
 		if($row_count > 0 )
 		{
-			header("location: employee_view.php");
+			header("location: employee_view.php?id={$id}");
 		} else{
 			header("location: employee_edit.php?id={$id}");
 		}
@@ -245,24 +283,32 @@ if ($_POST) {
 	/* employee login  */
 	else if (isset($_POST['login_submit'])) 
 	{
-
+		
 		$email = $_POST['email'];
 		$password = $_POST['password'];
+		$password = md5($password);
 
-		$sql = "SELECT * FROM user_admin WHERE email='$email' AND password = '$password'"; 
-		$result = $conn->query($sql);
-		if(mysqli_num_rows($result)>0)
+	    $sql_admin = "SELECT id,email, password,user_type,first_name FROM user_employee WHERE email='$email' AND password = '$password'"; 
+		$result_admin = $conn->query($sql_admin);
+
+		if(mysqli_num_rows($result_admin)>0)
 		{
-			$userData = mysqli_fetch_array($result);
+			$userData = mysqli_fetch_array($result_admin);
 			$_SESSION['id'] = $userData['id'];
-			$_SESSION['name'] = $userData['name'];
+			$_SESSION['email'] = $userData['email'];
+			$_SESSION['first_name'] = $userData['first_name'];
+			//echo $userData['user_type'];
+			//print_r($userData);die;
+			if($userData['user_type'] == 'Admin') {			
+				header("location: employee_reg.php");
+			
+			} else if($userData['user_type'] == 'User') {
+				header("location: employee_profile.php");
 
-			header("location: employee_reg.php");
-
-		}else{
-			$_SESSION['msg'] = " Wrong username  or password.";
-			header("location: index.php");
-		}		
+			} else {
+				header("location: login.php");
+			}			
+		}
 	}
 
 	/*leave insert data*/
@@ -281,7 +327,7 @@ if ($_POST) {
 		$leave_to_date  = date('Y-m-d', strtotime( $to_date ));
 
 
-		$sql = "INSERT INTO user_leave (employee_id, leave_type, from_date, to_date, comment) 
+		 $sql = "INSERT INTO user_leave (employee_id, leave_type, from_date, to_date, comment) 
 		VALUES ('$employee_id', '$leave_type', '$leave_from_date', '$leave_to_date','$comment')";
 
 		if ($conn->query($sql) === TRUE) {
@@ -290,7 +336,7 @@ if ($_POST) {
 			echo "Error: " . $sql . "<br>" . $conn->error;
 		}
 		$conn->close();
-				//header("Location: leave_view.php?id={$id}"); /* Redirect browser */
+				header("Location: leave_view.php?id={$id}"); /* Redirect browser */
 		exit(); 
 	}
 

@@ -915,5 +915,32 @@ if (($file_size > 5242880)){
 
  -->
 
+    <!--/* employee login  */
+ else if (isset($_POST['login_submit'])) 
+    {
 
+        $email = $_POST['email'];
+        $password = $_POST['password'];
+
+        $sql_admin = "SELECT * FROM user_admin WHERE email='$email' AND password = '$password' AND user_type = 'Admin'"; 
+        $result_admin = $conn->query($sql_admin);
+
+        $sql_admin = "SELECT * FROM user_admin WHERE email='$email' AND password = '$password' AND user_type = 'User'"; 
+        $result_admin = $conn->query($sql_admin);
+        
+
+
+        if(mysqli_num_rows($result_admin)>0)
+        {
+            $userData = mysqli_fetch_array($result_admin);
+            $_SESSION['id'] = $userData['id'];
+            $_SESSION['name'] = $userData['name'];
+
+            header("location: employee_reg.php");
+
+        }else{
+            echo    $_SESSION['msg'] = " Wrong username  or password.";
+            header("location: index.php");
+        }       
+    } -->
 

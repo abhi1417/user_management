@@ -2,7 +2,7 @@
 session_start();
 $var=json_decode($_COOKIE['registration'],true);    
 include("includes/dbConnection.php");
-if(!isset($_SESSION['id']) || $_SESSION['id']=="")
+if(!isset($_SESSION['email']) || $_SESSION['email']=="")
 {
     header("location: login.php");
 }

@@ -548,6 +548,7 @@ include("includes/sidebar.php");
                 </div><!-- End row-->
             </div><!-- end container -->
         </div><!-- End #page-right-content -->
+<?php include("includes/footer.php");?>
 <script type="text/javascript">
             $(document).ready(function() {
                 $('.form-validation').parsley();

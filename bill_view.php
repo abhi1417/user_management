@@ -1,4 +1,5 @@
 <?php 
+session_start();
 include("includes/dbConnection.php");
 include("includes/header.php");
 ?>
@@ -124,7 +125,9 @@ include("includes/header.php");
                         <th>Bill PDF/Image</th>
                         <th>Bill Description</th>
                         <th>Status</th>        
+                        <?php if ($_SESSION['user_type'] == 'Admin') { ?>
                         <th colsapn="2">Action</th>
+                        <?php } ?>
                     </tr>
                 </thead>
                 <tbody>
@@ -147,9 +150,11 @@ include("includes/header.php");
                                 <td><?php echo $row['bill_file_path']; ?></td> 
                                 <td><?php echo $row['bill_description']; ?></td> 
                                 <td><?php echo $msg; ?></td>  
+                                <?php if ($_SESSION['user_type'] == 'Admin') { ?>
                                 <td>&nbsp;&nbsp;<a href="bill_edit.php?bill_id=<?php echo $row['id'];?>"><i class="glyphicon glyphicon-eye-open"></i></a>&nbsp;&nbsp; 
                                     &nbsp;&nbsp;<a href="action.php?bill_id=<?php echo $row['id']; ?>" class="delete"><i class="glyphicon glyphicon-trash"></i></a>
                                 </td> 
+                                <?php } ?>
                             </tr>
                             <?php
                         }

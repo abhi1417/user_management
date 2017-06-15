@@ -275,7 +275,7 @@ if ($_POST) {
 			{
 				header("location: policy_view.php");
 			} else{
-				header("location: policy_edit.php?id={$id}");
+				//header("location: policy_edit.php?id={$id}");
 			}
 		}
 	}
@@ -288,14 +288,17 @@ if ($_POST) {
 		$password = $_POST['password'];
 		$password = md5($password);
 
-	    $sql_admin = "SELECT id,email, password,user_type,first_name FROM user_employee WHERE email='$email' AND password = '$password'"; 
+	    $sql_admin = "SELECT id, email, password, user_type, first_name FROM user_employee WHERE email='$email' AND password = '$password'"; 
 		$result_admin = $conn->query($sql_admin);
 
 		if(mysqli_num_rows($result_admin)>0)
 		{
+			
 			$userData = mysqli_fetch_array($result_admin);
-			$_SESSION['id'] = $userData['id'];
+
+			$id = $_SESSION['id'] = $userData['id'];
 			$_SESSION['email'] = $userData['email'];
+			$_SESSION['user_type'] = $userData['user_type'];
 			$_SESSION['first_name'] = $userData['first_name'];
 			//echo $userData['user_type'];
 			//print_r($userData);die;
@@ -303,7 +306,7 @@ if ($_POST) {
 				header("location: employee_reg.php");
 			
 			} else if($userData['user_type'] == 'User') {
-				header("location: employee_profile.php");
+				header("location: employee_profile.php?id={$id}");
 
 			} else {
 				header("location: login.php");
@@ -320,15 +323,21 @@ if ($_POST) {
 		$leave_type  = $_POST['leave_type'];
 		$from_date   = $_POST['from_date'];
 		$to_date     = $_POST['to_date'];
+		$number_of_days     = $_POST['number_of_days'];
 		$comment     = $_POST['comment'];
 
 
 		$leave_from_date  = date('Y-m-d', strtotime( $from_date ));
 		$leave_to_date  = date('Y-m-d', strtotime( $to_date ));
 
+		$first_date = strtotime('from_date');
+		$first_date = strtotime('-1 day', $first_date);
+		$second_date = strtotime('to_date');
+		$number_of_days = ($second_date - $first_date);
+		//floor($number_of_days / (60 * 60 * 24));
 
-		 $sql = "INSERT INTO user_leave (employee_id, leave_type, from_date, to_date, comment) 
-		VALUES ('$employee_id', '$leave_type', '$leave_from_date', '$leave_to_date','$comment')";
+		 echo $sql = "INSERT INTO user_leave (employee_id, leave_type, from_date, to_date, number_of_days, comment) 
+		VALUES ('$employee_id', '$leave_type', '$leave_from_date', '$leave_to_date','$number_of_days','$comment')"; die;
 
 		if ($conn->query($sql) === TRUE) {
 			$id = mysqli_insert_id($conn);
@@ -340,7 +349,7 @@ if ($_POST) {
 		exit(); 
 	}
 
-	/*News Section*/
+		/*News Section*/
 	else if (isset($_POST['applyNews'])) 
 	{
 
@@ -551,11 +560,11 @@ elseif(isset($_GET['id']))
 }
 
 /*policy delete*/
-elseif(isset($_GET['id']))
+elseif(isset($_GET['policy_id']))
 {
 
-	$id = $_GET['id'];
-	$query = "UPDATE user_policy SET status = 0 WHERE id = '$id'";
+	$policy_id = $_GET['policy_id'];
+	$query = "UPDATE user_policy SET status = 0 WHERE id = '$policy_id'";
 
 	$result = $conn->query($query);
 	header("location: policy_view.php");

@@ -68,6 +68,9 @@ $('#datepicker2').datepicker({
 });
 $("#datepicker1").datepicker().datepicker("setDate", new Date());
 $("#datepicker2").datepicker().datepicker("setDate", new Date());
+$("#datepicker1").datepicker({ dateFormat: 'dd/mm/yyyy' });
+$("#datepicker2").datepicker({ dateFormat: 'dd/mm/yyyy' });
+
 $(function () {
         $("#chkPdf").click(function () {
             if ($(this).is(":checked")) {

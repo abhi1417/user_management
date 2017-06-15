@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -92,9 +93,9 @@
                         <!-- Top nav Right menu -->
                         <ul class="nav navbar-nav navbar-right top-navbar-items-right pull-right">
                             <li class="dropdown top-menu-item-xs">
-                                <a href="" class="dropdown-toggle menu-right-item profile" data-toggle="dropdown" aria-expanded="true"><img src="" alt="user-img" class="img-circle"> </a>
+                                <a href="#" class="dropdown-toggle menu-right-item profile" data-toggle="dropdown" aria-expanded="true"><img src="assets/img/user.png" alt="user-img" class="img-circle"> </a>
                                 <ul class="dropdown-menu">
-                                    <li><a href="javascript:void(0)"><i class="ti-user m-r-10"></i> Profile</a></li>                                        
+                                    <li><a href="employee_profile.php?id={$_SESSION['id']}"><i class="ti-user m-r-10"></i> Profile</a></li>                                        
                                     <li class="divider"></li>
                                     <li><a href="logout.php"><i class="ti-power-off m-r-10"></i> Logout</a></li>
                                 </ul>

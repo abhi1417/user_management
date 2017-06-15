@@ -2,7 +2,7 @@
 session_start();
 $var=json_decode($_COOKIE['registration'],true);    
 include("includes/dbConnection.php");
-if(!isset($_SESSION['email']) || $_SESSION['email']=="")
+if(!isset($_SESSION['id']) || $_SESSION['id']=="")
 {
     header("location: login.php");
 }
@@ -67,7 +67,7 @@ $newstring = str_replace("FxB-", "", $string);
                                     <label for="last_name">Last Name<span class="text-danger">*</span></label>
                                     <input type="text" name="last_name" parsley-trigger="change" 
                                     placeholder="Enter user last name" class="form-control" id="last_name" value="<?php if(isset($var['last_name'])){ echo $var['last_name']; }?>">
-                                </div>
+                                </div>  
 
                                 <div class="form-group col-lg-6">
                                     <label for="email">Email address<span class="text-danger">*</span></label>

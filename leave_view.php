@@ -2,6 +2,7 @@
 include("includes/dbConnection.php");
 include("includes/header.php");
 //include("includes/sidebar.php");
+include("function.php");
 
 ?>
 <style>
@@ -14,6 +15,7 @@ include("includes/header.php");
             <div class="p-20 m-b-20">
                 <div class="col-md-6">
                     <form role="form" class="form-horizontal" action="action.php" method="POST">
+                        <input type="hidden" name="id" value="<?php echo isset($news_id)?$news_id:''; ?>" /> 
                         <div class="form-group">
                             <label class="col-sm-3 control-label" for="example-input-small">Employee Name<span class="text-danger">*</span></label>
                             <div class="col-sm-2"></div>
@@ -59,14 +61,16 @@ include("includes/header.php");
 </div>
 <!-- Col-md-12 end-->
 <?php
-$emp_id = isset($_GET['id']);
-if (!empty($emp_id)){
+$id = isset($_GET['id']);
+if (!empty($id)){
     $query  = "SELECT * FROM user_leave WHERE id ='".$_GET['id']."'";
     $result = $conn->query($query);
 
 } else {
     header("location:leave_manager.php");     
 }    
+dateFormate($row['from_date']);
+dateFormate($row['to_date']);
 ?>
 <div class="col-md-12">
     <div class="table-responsive m-b-20">
@@ -88,22 +92,24 @@ if (!empty($emp_id)){
                 if (mysqli_num_rows($result) > 0) {
                     while ($row = mysqli_fetch_array($result)) {
 
-                        $date1 = $row['from_date'];
-                        $date2 = $row['to_date'];
+                       /* $date1 = $row['from_date']. " 00:00:00";
+                        $date2 = $row['to_date']. " 23:59:59";
                         
-                        $start = strtotime($date1);
                         $end   = strtotime($date2);
+                        $start = strtotime($date1);
+                        $diff = ($end - $start);
+                        echo floor($diff / (60 * 60 * 24));*/
 
-                        $diff  = ceil(abs($end - $start) / 86400);
+                        // $diff  = ceil(abs($end - $start) / 86400);
                         
-                        $total_remainig = $total - $diff;
+                        $total_remainig = $total - $number_of_days;
                         ?>
                         <tr>
-                            <td><?php echo $row['from_date']; ?></td> 
-                            <td><?php echo $row['to_date']; ?></td> 
+                            <td><?php echo dateFormate($row['from_date']); ?></td> 
+                            <td><?php echo dateFormate($row['to_date']);?></td>
                             <td><?php echo $row['leave_type']; ?></td> 
                             <td><?php echo $total_remainig; ?></td> 
-                            <td><?php echo $diff; ?></td> 
+                            <td><?php echo $number_of_days; ?></td> 
                             <td><?php echo $row['status']; ?></td>  
                             <td><?php echo $row['comment']; ?></td> 
                             <td><!-- &nbsp;&nbsp;<a href="leave_edit.php?leave_id=<?php echo $row['id'];?>"><i class="glyphicon glyphicon-eye-open"></i></a>&nbsp;&nbsp;  -->
@@ -125,3 +131,29 @@ if (!empty($emp_id)){
 <!-- </div>     -->
 
 <?php include("includes/footer.php"); ?>
+
+
+<?php 
+/*
+date_default_timezone_set( "asia/kolkata" );
+$date1 = new DateTime('14-06-2017 00:00:00');
+$date2 = new DateTime('16-06-2017 23:59:59');
+$interval = $date1->diff($date2);
+echo "difference " . $interval->days . " days ";
+
+echo "<br><br><br><br>";
+echo "<br><br><br><br>";*/
+
+/*$first_date = strtotime('15-06-2017');
+$first_date = strtotime('-1 day', $first_date);
+$second_date = strtotime('20-06-2017');
+$diff = ($second_date - $first_date);
+echo floor($diff / (60 * 60 * 24));
+echo "<br><br><br><br>";
+echo "<br><br><br><br>";*/
+
+ 
+
+
+ ?>
+

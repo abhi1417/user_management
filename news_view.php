@@ -1,4 +1,5 @@
 <?php
+session_start();
 include("includes/dbConnection.php");
 include("includes/header.php");
 
@@ -20,7 +21,9 @@ include("includes/header.php");
                             <th>News Tittle</th>
                             <th>News Date</th>
                             <th>Description</th>                            
-                            <th colspan="2">Action</th>
+                            <?php if ($_SESSION['user_type'] == 'Admin') { ?>
+                            <th colsapn="2">Action</th>
+                            <?php } ?>
                         </tr>             
                     </thead>
                     <tbody>
@@ -30,13 +33,19 @@ include("includes/header.php");
                                 	
                                     ?>
                                     <tr>
+                                        <?php if($row['image'] == '' || $row['image'] == NULL || !file_exists('assets/img/'.$row['image'])){ ?>
+                                        <td><img src="<?php echo 'assets/img/profile.jpg'; ?>" hight="80" width="80"></td>
+                                        <?php } else { ?>
                                         <td><img src="<?php echo 'assets/img/'.$row['image']; ?>" hight="80" width="80"></td>
+                                        <?php } ?>
                                         <td><?php echo $row['tittle']; ?></td> 
                                         <td><?php echo $row['news_date']; ?></td> 
                                         <td><?php echo $row['description']; ?></td> 
+                                        <?php if ($_SESSION['user_type'] == 'Admin') { ?>                        
                                         <td><a href="news_edit.php?news_id=<?php echo $row['id'];?>"><i class="glyphicon glyphicon-pencil"></i></a>&nbsp;&nbsp;&nbsp;
                                             <a href="action.php?news_id=<?php echo $row['id']; ?>" class="delete"><i class="glyphicon glyphicon-trash"></i></a>
-                                            </td>
+                                        </td>
+                                        <?php } ?>
                                     </tr>
                                     <?php 
                                 }
@@ -50,3 +59,4 @@ include("includes/header.php");
 	</div>
 </div>
 <!-- end row -->
+<?php include("includes/footer.php");?>

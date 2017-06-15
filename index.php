@@ -1,8 +1,4 @@
 <?php 
-
-print_r($_SESSION);
-print_r($_POST);
-
 	include("includes/header.php"); 
      include("includes/sidebar.php"); ?>  
     <div id="page-right-content">

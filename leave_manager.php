@@ -1,5 +1,5 @@
 <?php 
-
+session_start();
 include("includes/dbConnection.php");
 include("includes/header.php");
 include("includes/sidebar.php");

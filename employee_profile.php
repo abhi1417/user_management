@@ -1,4 +1,5 @@
     <?php
+    
     session_start();
     include("includes/dbConnection.php");
     if(!isset($_SESSION['id']) || $_SESSION['id']=="")
@@ -8,8 +9,8 @@
     include("includes/header.php");
     include("includes/sidebar.php");
 
-    $emp_id = isset($_GET['id']);
-    if (!empty($emp_id)){
+    $id = isset($_GET['id']);
+    if (!empty($id)){
         $query = "SELECT * FROM user_employee WHERE id ='".$_GET['id']."'";
         $result = $conn->query($query);
         $row = mysqli_fetch_array($result);
@@ -61,6 +62,7 @@
                   <h2>Personal Information</h2>
                   <hr>
               </div>     
+              <input type="hidden" name="id" value="<?php echo isset($id)?$id:''; ?>" /> 
               <div class="col-md-12 profile_info_panel">
                  <label for="first_name" class="col-md-6 ">Employee ID </label>
                       <div class="col-md-6">

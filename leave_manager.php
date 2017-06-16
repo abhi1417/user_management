@@ -1,5 +1,4 @@
 <?php 
-session_start();
 include("includes/dbConnection.php");
 include("includes/header.php");
 include("includes/sidebar.php");
@@ -14,7 +13,7 @@ include("includes/sidebar.php");
             <div class="col-lg-12">
                 <div class="p-20 m-b-20">
                     <div class="col-md-6">
-                        <form role="form" class="form-horizontal" action="action.php" method="POST">
+                        <form role="form" class="form-horizontal" action="action.php" method="POST" >
                             <div class="form-group">
                                 <label class="col-sm-3 control-label" for="example-input-small">Employee<span class="text-danger">*</span></label>
                                 <div class="col-sm-1"></div>
@@ -22,7 +21,7 @@ include("includes/sidebar.php");
                                     <select id="employee_id" name="employee_id" class="form-control input-sm" > 
                                         <option value="0" >Select Employee</option>
                                          <?php 
-                                              $query = "SELECT employee_id, first_name FROM user_employee WHERE  status = '1'";
+                                              $query = "SELECT id,employee_id, first_name FROM user_employee WHERE  status = '1'";
                                               $result = $conn->query($query);
                                               while ($row = mysqli_fetch_array($result))
                                                 {
@@ -30,7 +29,7 @@ include("includes/sidebar.php");
                                                     $employee_id = $row['employee_id']." : ".$row['first_name'];
                                                 ?>
                                                
-                                                    <option value="<?php echo $employee_id;?>"><?php echo $employee_id; ?></option>
+                                                    <option value="<?php echo $row['id'];?>"><?php echo $employee_id; ?></option>
                                                
                                                
                                                 <?php

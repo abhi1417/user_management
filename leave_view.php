@@ -14,61 +14,81 @@ include("function.php");
         <div class="col-lg-12">
             <div class="p-20 m-b-20">
                 <div class="col-md-6">
-                    <form role="form" class="form-horizontal" action="action.php" method="POST">
-                        <input type="hidden" name="id" value="<?php echo isset($news_id)?$news_id:''; ?>" /> 
+                    <form role="form" class="form-horizontal" id="form_leave" action="<?php echo $_SERVER['PHP_SELF']; ?>" method="GET" onchange="onSelectChange()">
                         <div class="form-group">
                             <label class="col-sm-3 control-label" for="example-input-small">Employee Name<span class="text-danger">*</span></label>
                             <div class="col-sm-2"></div>
                             <div class="col-sm-6">
-                                <select id="employee_id" name="employee_id" class="form-control input-sm" required>                                   
-                                 <?php 
-                                 $query = "SELECT employee_id FROM user_leave WHERE id ='".$_GET['id']."' ";
-                                 $result = $conn->query($query);
-                                 while ($row = mysqli_fetch_array($result))
-                                 {
-                                    $employee_id = $row['employee_id'];
-                                    ?>
-                                    <option value="<?php echo $row['employee_id'];?>"><?php echo $employee_id; ?></option>
-                                    <?php
-                                }
+                               <?php
+                               if ($_SESSION['user_type'] == 'Admin'){
+                                $WHERE = '';
+                            } else {
+                                $WHERE = " WHERE id ='".$_SESSION['id']."'";
+                            }
+                            $query  = "SELECT id,employee_id,first_name FROM user_employee $WHERE";
+                            ?>
+                            <select id="employee_id" name="employee_id" class="form-control input-sm"  required>                                   
+                               <?php $result = $conn->query($query);
+                               while ($row = mysqli_fetch_array($result))
+                               {
+                                $employee_id = $row['employee_id']." : ".$row['first_name'];
                                 ?>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="col-sm-3 control-label" for="example-input-small">Leave Type<span class="text-danger">*</span></label>
-                        <div class="col-sm-2"></div>
-                        <div class="col-sm-6">
-                            <select id="leave_name" name="leave_name" class="form-control input-sm" required>                                         
-                              <?php
-                              $query_leave_type = "SELECT * FROM leave_type WHERE status ='1' ";
-                              $total = 0;
-                              $result_leave_type = $conn->query($query_leave_type);
-                              while ($row_leave_type = mysqli_fetch_array($result_leave_type)) {
-
-                                $total += $row_leave_type['total_leave'];
-                                ?>                            
-                                <option value="<?php echo $row_leave_type['id'];?>" > <?php  echo $row_leave_type['leave_name']; ?> </option>                                        
+                                <option value="<?php echo $row['id'];?>"><?php echo $employee_id; ?></option>
                                 <?php
                             }
                             ?>
                         </select>
                     </div>
-                </div>  
-            </form>
-        </div> <!-- end col -->
-    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-3 control-label" for="example-input-small">Leave Type<span class="text-danger">*</span></label>
+                    <div class="col-sm-2"></div>
+                    <div class="col-sm-6">
+                        <select id="leave_name" name="leave_name" class="form-control input-sm" required>                                         
+                          <?php
+                          $query_leave_type = "SELECT * FROM leave_type WHERE status ='1' ";
+                          $total = 0;
+                          $result_leave_type = $conn->query($query_leave_type);
+                          while ($row_leave_type = mysqli_fetch_array($result_leave_type)) {
+
+                            $total += $row_leave_type['total_leave'];
+                            ?>                            
+                            <option value="<?php echo $row_leave_type['id'];?>" > <?php  echo $row_leave_type['leave_name']; ?> </option>                                        
+                            <?php
+                        }
+                        ?>
+                    </select>
+                </div>
+            </div>  
+        </form>
+    </div> <!-- end col -->
+</div>
 </div>
 <!-- Col-md-12 end-->
 <?php
-$id = isset($_GET['id']);
-if (!empty($id)){
-    $query  = "SELECT * FROM user_leave WHERE id ='".$_GET['id']."'";
-    $result = $conn->query($query);
+$limit = 2;  
+if (isset($_GET["page"])) 
+{
+ $page  = $_GET["page"];
+} else 
+{
+ $page=1; 
+};  
+$start_from = ($page-1) * $limit; 
+if($_GET['employee_id']){
+   $WHERE = " WHERE employee_id ='".$_GET['employee_id']."'";
+}
+else if ($_SESSION['user_type'] == 'Admin')
+{
+    $WHERE = '';
+} 
+else
+{
+    $WHERE = " WHERE employee_id ='".$_SESSION['id']."'";
+}
+echo $query  = "SELECT * FROM user_leave $WHERE  LIMIT $start_from, $limit"; 
+$result = $conn->query($query);
 
-} else {
-    header("location:leave_manager.php");     
-}    
 dateFormate($row['from_date']);
 dateFormate($row['to_date']);
 ?>
@@ -84,37 +104,31 @@ dateFormate($row['to_date']);
                     <th>Number Of Days</th>
                     <th>Status</th>        
                     <th>Comment</th>
-                    <th>Action</th>
+                    <?php if ($_SESSION['user_type'] == 'Admin') { ?>
+                    <th colsapn="2">Action</th>
+                    <?php } ?>  
                 </tr>
             </thead>
             <tbody>
                 <?php        
                 if (mysqli_num_rows($result) > 0) {
                     while ($row = mysqli_fetch_array($result)) {
-
-                       /* $date1 = $row['from_date']. " 00:00:00";
-                        $date2 = $row['to_date']. " 23:59:59";
+                       // print_r($row);
+                        //$total_remainig = $total - $row['number_of_days'];
                         
-                        $end   = strtotime($date2);
-                        $start = strtotime($date1);
-                        $diff = ($end - $start);
-                        echo floor($diff / (60 * 60 * 24));*/
-
-                        // $diff  = ceil(abs($end - $start) / 86400);
-                        
-                        $total_remainig = $total - $number_of_days;
+                        //$remainig_leave = $total_remainig - $row['number_of_days'];
                         ?>
                         <tr>
                             <td><?php echo dateFormate($row['from_date']); ?></td> 
                             <td><?php echo dateFormate($row['to_date']);?></td>
                             <td><?php echo $row['leave_type']; ?></td> 
                             <td><?php echo $total_remainig; ?></td> 
-                            <td><?php echo $number_of_days; ?></td> 
+                            <td><?php echo $row['number_of_days']; ?></td> 
                             <td><?php echo $row['status']; ?></td>  
                             <td><?php echo $row['comment']; ?></td> 
-                            <td><!-- &nbsp;&nbsp;<a href="leave_edit.php?leave_id=<?php echo $row['id'];?>"><i class="glyphicon glyphicon-eye-open"></i></a>&nbsp;&nbsp;  -->
-                                &nbsp;&nbsp;<a href="action.php?leave_id=<?php echo $row['id']; ?>" class="delete"><i class="glyphicon glyphicon-trash"></i></a>
-                            </td> 
+                            <?php if ($_SESSION['user_type'] == 'Admin') { ?>                        
+                            <td><a href="action.php?leave_id=<?php echo $row['id']; ?>" class="delete"><i class="glyphicon glyphicon-trash"></i></a></td>
+                            <?php } ?> 
                         </tr>
                         <?php
                     }
@@ -122,6 +136,18 @@ dateFormate($row['to_date']);
                 ?>                            
             </tbody>
         </table>
+        <?php  
+            $sql = "SELECT COUNT(*) FROM user_leave";  
+            $rs_result = mysql_query($sql);  
+            $row = mysql_fetch_row($rs_result);  
+            $total_records = $row[0];  
+            $total_pages = ceil($total_records / $limit);  
+            $pagLink = "<div class='pagination'>";  
+            for ($x=1; $x<=$total_pages; $x++) {  
+                         $pagLink .= "<a href='leave_view.php?page=".$x."'>".$x."</a>";  
+            };  
+            echo $pagLink . "</div>";  
+            ?>
     </div>
 </div>
 </div>   
@@ -130,30 +156,12 @@ dateFormate($row['to_date']);
 <!-- end container -->
 <!-- </div>     -->
 
+<script>
+function onSelectChange(){
+   document.getElementById('form_leave').submit();
+}
+
+</script>
 <?php include("includes/footer.php"); ?>
 
-
-<?php 
-/*
-date_default_timezone_set( "asia/kolkata" );
-$date1 = new DateTime('14-06-2017 00:00:00');
-$date2 = new DateTime('16-06-2017 23:59:59');
-$interval = $date1->diff($date2);
-echo "difference " . $interval->days . " days ";
-
-echo "<br><br><br><br>";
-echo "<br><br><br><br>";*/
-
-/*$first_date = strtotime('15-06-2017');
-$first_date = strtotime('-1 day', $first_date);
-$second_date = strtotime('20-06-2017');
-$diff = ($second_date - $first_date);
-echo floor($diff / (60 * 60 * 24));
-echo "<br><br><br><br>";
-echo "<br><br><br><br>";*/
-
- 
-
-
- ?>
 

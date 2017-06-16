@@ -40,6 +40,8 @@ include("includes/dbConnection.php");?>
                         <a href="javascript: void(0);" aria-expanded="true">Leave Manage <span class="fa arrow"></span></a>
                         <ul class="nav-second-level nav" aria-expanded="true">
                             <li><a href="leave_manager.php">Leave Manager</a></li>
+                            <li><a href="leave_view.php">Leave View</a></li>
+
                         </ul>
                     </li>
                     <li>

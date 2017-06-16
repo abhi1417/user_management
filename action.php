@@ -1,5 +1,4 @@
 <?php
-session_start();
 include("includes/dbConnection.php");
  /*ini_set("SMTP", "aspmx.l.google.com");
     ini_set("sendmail_from", "kothari.abhishek@fxbytes.com");
@@ -27,6 +26,12 @@ function send_mail($employee_id,$first_name,$email,$password)
   mail($email,$subject,$message,$headers);
 
 }*/
+			/*$employee_id = $_POST['employee_id'];
+			$first_name = $_POST['first_name'];
+			$email = $_POST['email'];
+			$password = $_POST['password'];
+			send_mail($employee_id, $first_name,$email,$password);*/
+
 /*$to      = 'jain.gourav2@mailinator.com';
 $subject = 'Fake sendmail test';
 $message = 'If we can read this, it means that our fake Sendmail setup works!';
@@ -70,31 +75,31 @@ if ($_POST) {
 		$bond_duration_to    = $_POST['bond_duration_to'];
 
 		$cookie_ary  = array('employee_id'=>$employee_id,
-							 'first_name'=>$first_name,
-							 'last_name'=>$last_name,
-							 'email'=>$email,
-							 'password'=>$password,
-							 'personal_number'=>$personal_number,
-							 'emergency_number'=>$emergency_number,
-							 'residental_address'=>$residental_address,
-							 'home_address'=>$home_address,
-							 'marital_status'=>$marital_status,
-							 'gender'=>$gender,
-							 'date_of_birth'=>$date_of_birth,
-							 'role_type'=>$role_type,
-							 'employee_role'=>$employee_role,
-							 'project_team'=>$project_team,
-							 'education'=>$education,
-							 'state'=>$state,
-							 'city'=>$city,
-							 'nationality'=>$nationality,
-							 'joining_date'=>$joining_date,
-							 'bond'=>$bond,
-							 'bond_duration_from'=>$bond_duration_from,
-                             'bond_duration_to'=>$bond_duration_to
-							);
+			'first_name'=>$first_name,
+			'last_name'=>$last_name,
+			'email'=>$email,
+			'password'=>$password,
+			'personal_number'=>$personal_number,
+			'emergency_number'=>$emergency_number,
+			'residental_address'=>$residental_address,
+			'home_address'=>$home_address,
+			'marital_status'=>$marital_status,
+			'gender'=>$gender,
+			'date_of_birth'=>$date_of_birth,
+			'role_type'=>$role_type,
+			'employee_role'=>$employee_role,
+			'project_team'=>$project_team,
+			'education'=>$education,
+			'state'=>$state,
+			'city'=>$city,
+			'nationality'=>$nationality,
+			'joining_date'=>$joining_date,
+			'bond'=>$bond,
+			'bond_duration_from'=>$bond_duration_from,
+			'bond_duration_to'=>$bond_duration_to
+			);
 		setcookie('registration', json_encode($cookie_ary), time() + 80000, '/');
-					
+
 		$birth_date  = date('Y-m-d', strtotime( $date_of_birth ));
 		$joining_date = date('Y-m-d', strtotime( $joining_date ));
 		$bond_duration_from_date = date('Y-m-d', strtotime( $bond_duration_from ));
@@ -130,14 +135,9 @@ if ($_POST) {
 		
 		else {
 			
-			 $sql = "INSERT INTO user_employee 
+			$sql = "INSERT INTO user_employee 
 			(employee_id, first_name, last_name, email, password, personal_number, emergency_number, residental_address, home_address, marital_status, gender, date_of_birth, role_type, employee_role, project_team, education, state, city, nationality, joining_date, bond, bond_duration_from, bond_duration_to) 
 			VALUES ('$employee_id','$first_name', '$last_name', '$email', '$password','$personal_number', '$emergency_number', '$residental_address', '$home_address', '$marital_status', '$gender', '$birth_date', '$role_type', '$employee_role', '$project_team', '$education', '$state', '$city', '$nationality', '$joining_date', '$bond', '$bond_duration_from_date', '$bond_duration_to_date')";
-			/*$employee_id = $_POST['employee_id'];
-			$first_name = $_POST['first_name'];
-			$email = $_POST['email'];
-			$password = $_POST['password'];
-			send_mail($employee_id, $first_name,$email,$password);*/
 
 
 			if ($conn->query($sql) === TRUE) {
@@ -275,7 +275,7 @@ if ($_POST) {
 			{
 				header("location: policy_view.php");
 			} else{
-				//header("location: policy_edit.php?id={$id}");
+					//header("location: policy_edit.php?id={$id}");
 			}
 		}
 	}
@@ -288,7 +288,7 @@ if ($_POST) {
 		$password = $_POST['password'];
 		$password = md5($password);
 
-	    $sql_admin = "SELECT id, email, password, user_type, first_name FROM user_employee WHERE email='$email' AND password = '$password'"; 
+		$sql_admin = "SELECT id, email, password, user_type, first_name FROM user_employee WHERE email='$email' AND password = '$password'"; 
 		$result_admin = $conn->query($sql_admin);
 
 		if(mysqli_num_rows($result_admin)>0)
@@ -304,7 +304,7 @@ if ($_POST) {
 			//print_r($userData);die;
 			if($userData['user_type'] == 'Admin') {			
 				header("location: employee_reg.php");
-			
+
 			} else if($userData['user_type'] == 'User') {
 				header("location: employee_profile.php?id={$id}");
 
@@ -317,39 +317,46 @@ if ($_POST) {
 	/*leave insert data*/
 	else if (isset($_POST['applyLeave'])) 
 	{
-
-
-		$employee_id = $_POST['employee_id'];
-		$leave_type  = $_POST['leave_type'];
-		$from_date   = $_POST['from_date'];
-		$to_date     = $_POST['to_date'];
-		$number_of_days     = $_POST['number_of_days'];
-		$comment     = $_POST['comment'];
+		$employee_id 	 = $_POST['employee_id'];
+		$leave_type 	 = $_POST['leave_type'];
+		$from_date   	 = $_POST['from_date'];
+		$to_date    	 = $_POST['to_date'];
+		$number_of_days  = $_POST['number_of_days'];
+		$remaining_leave = $_POST['remaining_leave'];
+		$comment         = $_POST['comment'];
 
 
 		$leave_from_date  = date('Y-m-d', strtotime( $from_date ));
 		$leave_to_date  = date('Y-m-d', strtotime( $to_date ));
 
-		$first_date = strtotime('from_date');
+		$first_date = strtotime($from_date);
 		$first_date = strtotime('-1 day', $first_date);
-		$second_date = strtotime('to_date');
-		$number_of_days = ($second_date - $first_date);
-		//floor($number_of_days / (60 * 60 * 24));
+		$second_date = strtotime($to_date);
+		$diff = ($second_date - $first_date);
+		$days = floor($diff / (60 * 60 * 24));
 
-		 echo $sql = "INSERT INTO user_leave (employee_id, leave_type, from_date, to_date, number_of_days, comment) 
-		VALUES ('$employee_id', '$leave_type', '$leave_from_date', '$leave_to_date','$number_of_days','$comment')"; die;
+		$query_leave = "SELECT sum(total_leave) as total_leave FROM leave_type";
+		$result_leave = $conn->query($query_leave);
+		$row_leave = mysqli_fetch_row($result_leave);
+		
+		$total_leave = $row_leave[0];
+		$leave_bal = $total_leave - $_POST['number_of_days'];
+		//$leave_bal1 = $leave_bal - $_POST['number_of_days'];
+
+		echo $sql = "INSERT INTO user_leave (employee_id, leave_type, from_date, to_date, number_of_days,remaining_leave, comment) 
+		VALUES ('".$employee_id."', '".$leave_type."', '".$leave_from_date."', '".$leave_to_date."','".$days."','".$leave_bal."','".$comment."')";die;
 
 		if ($conn->query($sql) === TRUE) {
 			$id = mysqli_insert_id($conn);
 		} else {
 			echo "Error: " . $sql . "<br>" . $conn->error;
 		}
-		$conn->close();
-				header("Location: leave_view.php?id={$id}"); /* Redirect browser */
-		exit(); 
+		//header("Location: leave_view.php?id={$id}"); /* Redirect browser */
+		//$conn->close();
+		//exit(); 
 	}
 
-		/*News Section*/
+	/*News Section*/
 	else if (isset($_POST['applyNews'])) 
 	{
 

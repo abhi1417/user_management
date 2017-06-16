@@ -1,14 +1,11 @@
 <?php
-session_start();
 $var=json_decode($_COOKIE['registration'],true);    
 include("includes/dbConnection.php");
-if(!isset($_SESSION['id']) || $_SESSION['id']=="")
-{
-    header("location: login.php");
-}
 include("includes/header.php");
 include("includes/sidebar.php"); 
+include("function.php");
 
+checkSession();
 $string = $var['employee_id'];
 $newstring = str_replace("FxB-", "", $string);
 
@@ -35,7 +32,7 @@ $newstring = str_replace("FxB-", "", $string);
                     <h4 class="header-title m-t-0">Personal Information</h4>
                     <!-- Pesronal Information Start -->
                     <div class="p-20 m-b-20">
-                        <form action="action.php" class="form-validation" method="POST">
+                        <form role="form" action="action.php" class="form-validation" method="POST">
                                 <!-- <div class="form-group col-lg-4">
                                     <label for="firstName">Profile Picture<span class="text-danger">*</span></label>
                                         <div class="main-img-preview"> <img class="thumbnail img-preview" width="150" src="assets/images/profile.jpg" title="Preview Logo"></div>

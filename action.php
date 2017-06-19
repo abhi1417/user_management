@@ -343,15 +343,15 @@ if ($_POST) {
 		$leave_bal = $total_leave - $_POST['number_of_days'];
 		//$leave_bal1 = $leave_bal - $_POST['number_of_days'];
 
-		echo $sql = "INSERT INTO user_leave (employee_id, leave_type, from_date, to_date, number_of_days,remaining_leave, comment) 
-		VALUES ('".$employee_id."', '".$leave_type."', '".$leave_from_date."', '".$leave_to_date."','".$days."','".$leave_bal."','".$comment."')";die;
+		$sql = "INSERT INTO user_leave (employee_id, leave_type, from_date, to_date, number_of_days,remaining_leave, comment) 
+		VALUES ('".$employee_id."', '".$leave_type."', '".$leave_from_date."', '".$leave_to_date."','".$days."','".$leave_bal."','".$comment."')";
 
 		if ($conn->query($sql) === TRUE) {
 			$id = mysqli_insert_id($conn);
 		} else {
 			echo "Error: " . $sql . "<br>" . $conn->error;
 		}
-		//header("Location: leave_view.php?id={$id}"); /* Redirect browser */
+		header("Location: leave_view.php?id={$id}"); /* Redirect browser */
 		//$conn->close();
 		//exit(); 
 	}

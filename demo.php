@@ -1113,3 +1113,53 @@ function onSelectChange(){
 <?php include("includes/footer.php"); ?>
 
 
+http://localhost/user_management/leave_view.php?dtarea=1&search=2017-06-01
+
+
+
+dtarea=1&search=2017-06-01
+
+
+
+&
+
+
+dtarea=1
+
+search=2017-06-01
+
+employ_id = 5
+
+
+key == employ_id
+{
+    /
+
+
+<script>
+$('.srchclass').on('change', function() {
+
+    var srch_type = $(this).attr("name");
+    var srch_id = $(this).find(":selected").val();
+
+    if(srch_type == 'employee_id')
+    {
+        url = srch_type+"="+srch_id;
+    }
+    else
+    {
+        url = srch_type+"="+srch_id;
+    }
+    //alert(url);
+    var actual_url = window.location.href;
+    //alert(actual_url); 
+    var arr = url.split('?')[0];
+    var new_url = arr + '?employee_id=' +url;  
+    window.location.href = new_url;
+});
+</script>
+<?php include("includes/footer.php"); ?>
+<!-- var actual_url = window.location.href; 
+    var arr = url.split('?')[0];
+    var new_url = arr + '?employee_id=' +emp_id + '?leave_name=' +value;  
+    window.location.href = new_url; -->

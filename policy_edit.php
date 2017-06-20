@@ -14,7 +14,6 @@ include("includes/sidebar.php");
 
 
   $query = "SELECT * FROM user_policy WHERE id ='".$_GET['id']."'";
-  /*$result = mysql_query ($sql) or die (mysql_error ());*/
   $result = $conn->query($query);
   $rows = mysqli_fetch_array($result);
 

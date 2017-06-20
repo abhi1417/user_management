@@ -56,8 +56,8 @@ include("includes/dbConnection.php");?>
                         <a href="javascript: void(0);" aria-expanded="true">Policy <span class="fa arrow"></span></a>
                         <ul class="nav-second-level nav" aria-expanded="true">
                             <li><a href="policy.php">policy Registration</a></li>
-                            <li><a href="policy_edit.php">policy View</a></li>
-                            <li><a href="policy_view.php">policy Edit</a></li>
+                            <li><a href="policy_view.php">policy View</a></li>
+                            <li><a href="policy_edit.php">policy Edit</a></li>
                         </ul>
                     </li>
                     <li>
@@ -104,7 +104,7 @@ include("includes/dbConnection.php");?>
                     <li>
                         <a href="javascript: void(0);" aria-expanded="true">Policy <span class="fa arrow"></span></a>
                         <ul class="nav-second-level nav" aria-expanded="true">
-                            <li><a href="policy_edit.php">policy View</a></li>
+                            <li><a href="policy_view.php">policy View</a></li>
                         </ul>
                     </li>
                     <li>

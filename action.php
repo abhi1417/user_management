@@ -339,8 +339,7 @@ if ($_POST) {
 		$result_leave = $conn->query($query_leave);
 		$row_leave = mysqli_fetch_row($result_leave);
 		
-		$total_leave = $row_leave[0];
-		$leave_bal = $total_leave - $_POST['number_of_days'];
+
 		//$leave_bal1 = $leave_bal - $_POST['number_of_days'];
 
 		$sql = "INSERT INTO user_leave (employee_id, leave_type, from_date, to_date, number_of_days,remaining_leave, comment) 

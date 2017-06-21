@@ -10,8 +10,8 @@ include("function.php");
     <div class="row">
         <div class="col-lg-12">
             <div class="p-20 m-b-20">
-                <div class="col-md-6">
-                    <form role="form" class="form-horizontal" id="form_leave" action="<?php echo $_SERVER['PHP_SELF']; ?>" method="GET" >
+                <form role="form" class="form-horizontal" id="form_leave" action="<?php echo $_SERVER['PHP_SELF']; ?>" method="GET" >
+                    <div class="col-md-6">
                         <div class="form-group">
                             <label class="col-sm-3 control-label" for="example-input-small">Employee Name<span class="text-danger">*</span></label>
                             <div class="col-sm-2"></div>
@@ -25,47 +25,83 @@ include("function.php");
                                 $query  = "SELECT id,employee_id,first_name FROM user_employee $WHERE ";
                                 ?>
                                 <select id="employee_id" name="employee_id" class="form-control input-sm srchclass">                                   
-                                <option value="" >Select Employee</option>                                        
-                                 <?php $result = $conn->query($query);
-                                 while ($row = mysqli_fetch_array($result))
-                                 {
-                                    $employee_id = $row['employee_id']." : ".$row['first_name'];
+                                    <option value="" >Select Employee</option>                                        
+                                    <?php $result = $conn->query($query);
+                                    while ($row = mysqli_fetch_array($result))
+                                    {
+                                        $employee_id = $row['employee_id']." : ".$row['first_name'];
+                                        ?>
+                                        <option value="<?php echo $row['id'];?>" <?php if(isset($row['id']) && $row['id'] == $_GET['employee_id'])echo 'selected = "selected"';?>><?php echo $employee_id;?></option>
+
+                                        <?php
+                                    }
                                     ?>
-                                    <option value="<?php echo $row['id'];?>" <?php if(isset($row['id']) && $row['id'] == $_GET['employee_id'])echo 'selected = "selected"';?>><?php echo $employee_id;?></option>
-
-                                    <?php
-                                }
-                                ?>
-                            </select>
+                                </select>
+                            </div>
                         </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="col-sm-3 control-label" for="example-input-small">Leave Type<span class="text-danger">*</span></label>
-                        <div class="col-sm-2"></div>
-                        <div class="col-sm-6">
-                            <select id="leave_name" name="leave_name" class="form-control input-sm srchclass">                                         
-                            <option value="">Select Option</option>                                        
-                              <?php
-                              $query_leave_type = "SELECT leave_name, id FROM leave_type ";
-                              $total = 0;
-                              $result_leave_type = $conn->query($query_leave_type);
-                              while ($row_leave_type = mysqli_fetch_array($result_leave_type)) {
+                    </div>    
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label" for="example-input-small">Leave Type<span class="text-danger">*</span></label>
+                            <div class="col-sm-2"></div>
+                            <div class="col-sm-6">
+                                <select id="leave_name" name="leave_name" class="form-control input-sm srchclass">                                         
+                                    <option value="">Select Option</option>                                        
+                                    <?php
+                                    $query_leave_type = "SELECT leave_name, id FROM leave_type ";
+                                    $total = 0;
+                                    $result_leave_type = $conn->query($query_leave_type);
+                                    while ($row_leave_type = mysqli_fetch_array($result_leave_type)) {
 
-                                $total += $row_leave_type['total_leave'];
-                                ?>                            
-                                <option value="<?php echo $row_leave_type['id'];?>" > <?php  echo $row_leave_type['leave_name']; ?> </option>                                        
-                                <?php
-                            }
-                            ?>
-                        </select>
+                                        $total += $row_leave_type['total_leave'];
+                                        ?>                            
+                                        <option value="<?php echo $row_leave_type['id'];?>" > <?php  echo $row_leave_type['leave_name']; ?> </option>                                        
+                                        <?php
+                                    }
+                                    ?>
+                                </select>
+                            </div>
+                        </div>
+                    </div>    
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label" for="example-input-small">Leave Type<span class="text-danger">*</span></label>
+                            <div class="col-sm-2"></div>
+                            <div class="col-sm-6">
+                                <select id="leave_name" name="leave_name" class="form-control input-sm srchclass">                                         
+                                    <option value="">Select Option</option>                                        
+                                    <?php
+                                    $query_leave_type = "SELECT total_leave,leave_name, id FROM leave_type ";
+                                    $total = 0;
+                                    $result_leave_type = $conn->query($query_leave_type);
+                                    while ($row_leave_type = mysqli_fetch_array($result_leave_type)) {
+
+                                        $total += $row_leave_type['total_leave'];
+                                        ?>                            
+                                        <option value="<?php echo $row_leave_type['id'];?>" > <?php  echo $row_leave_type['leave_name']; ?> </option>                                        
+                                        <?php
+                                    }
+                                   
+                                    ?>
+                                </select>
+                            </div>
+                        </div>  
                     </div>
-                </div>  
+                    <div class= "col-md-6">
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label" for="example-input-small"></label>
+                            <div class="col-sm-2"></div>
+                            <div class="col-sm-6">
+                                <input type="submit" name="leaveDetailsSubmit" id="leaveDetailsSubmit">
+                            </div>
+                        </div>  
+                    </div>
+                </div>
             </form>
         </div>
-    </div>
-</div>
+    </div>   
 <?php
-$limit = 2;  
+$limit = 12;  
 if (isset($_GET["page"])) 
 {
    $page  = $_GET["page"];
@@ -96,7 +132,7 @@ else
 {
     $WHERE = " WHERE employee_id ='".$_SESSION['id']."'";
 }
-$query  = "SELECT * FROM user_leave $WHERE  LIMIT $start_from, $limit "; 
+$query  = "SELECT * FROM user_leave  $WHERE  LIMIT $start_from, $limit "; 
 $result = $conn->query($query);
 
 dateFormate($row['from_date']);
@@ -119,10 +155,11 @@ dateFormate($row['to_date']);
                   <input type="search" class="form-control input-sm" id="myInput" name="search" placeholder="YYYY-MM-DD" >
               </div>
           </div>              
-      </form>      
-      <table class="table table-striped table-bordered">
+        </form>      
+    <table class="table table-striped table-bordered">
         <thead>
             <tr>
+                <th>Employee Name</th>
                 <th>From Date</th>
                 <th>To Date</th>
                 <th>Leave Type</th>
@@ -138,13 +175,33 @@ dateFormate($row['to_date']);
         <tbody>
             <?php        
             if (mysqli_num_rows($result) > 0) {
+                 $firsttime = 0;
                 while ($row = mysqli_fetch_array($result)) {
                     ?>
                     <tr>
+                        <td><?php echo $row['employee_id']; ?></td> 
                         <td><?php echo dateFormate($row['from_date']); ?></td> 
                         <td><?php echo dateFormate($row['to_date']);?></td>
-                        <td><?php echo $row['leave_type']; ?></td> 
-                        <td><?php echo $total_remainig; ?></td> 
+                        <td><?php echo $row['leave_type']; ?></td>
+                        <?php
+                       
+
+                        //echo $firsttime;
+                        $x = $total - $row['number_of_days'];
+                        
+
+                        if($firsttime>0)
+                        {   
+                           $x =  $x - $row['number_of_days'];
+                        }
+
+                        //$y = $x;
+
+                        //$z = $x - $row['number_of_days'];
+
+                        ?>
+                        <td><?php echo $x; ?></td> 
+
                         <td><?php echo $row['number_of_days']; ?></td> 
                         <td><?php echo $row['status']; ?></td>  
                         <td><?php echo $row['comment']; ?></td> 
@@ -152,7 +209,7 @@ dateFormate($row['to_date']);
                         <td><a href="action.php?leave_id=<?php echo $row['id']; ?>" class="delete"><i class="glyphicon glyphicon-trash"></i></a></td>
                         <?php } ?> 
                     </tr>
-                    <?php
+                    <?php $firsttime++;
                 }
             }
             ?>                            
@@ -176,7 +233,7 @@ dateFormate($row['to_date']);
 </div>
 
 <script>
-$('.srchclass').on('change', function() {
+/*$('.srchclass').on('change', function() {
     var srch_type = $(this).attr("name");
     var srch_id = $(this).find(":selected").val();
     if(srch_type == 'employee_id')
@@ -191,6 +248,6 @@ $('.srchclass').on('change', function() {
     var arr = url.split('?')[0];
     var new_url = arr + '?employee_id=' +url; 
     window.location.href = new_url;
-});
+});*/
 </script>
 <?php include("includes/footer.php"); ?>

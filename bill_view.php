@@ -3,7 +3,11 @@ session_start();
 include("includes/dbConnection.php");
 include("includes/header.php");
 ?>
-
+<style>
+.modal-content {
+    margin: 110px;
+}
+</style>
 <div class="container">                                               
     <div class="row">
         <div class="col-lg-12">
@@ -149,7 +153,13 @@ include("includes/header.php");
                                 <td><?php echo $row['bill_amount']; ?></td> 
                                 <td><?php echo $row['bill_file_path']; ?></td> 
                                 <td><?php echo $row['bill_description']; ?></td> 
-                                <td><?php echo $msg; ?></td>  
+                                <td>
+                                    <select amount="<?php echo $row['bill_amount'];?>">
+                                        <option value="">Select</option>
+                                        <option value="Approve">Approved</option>
+                                        <option value="UnApprove">UnApproved</option>
+                                    </select>
+                                </td>  
                                 <?php if ($_SESSION['user_type'] == 'Admin') { ?>
                                 <td>&nbsp;&nbsp;<a href="bill_edit.php?bill_id=<?php echo $row['id'];?>"><i class="glyphicon glyphicon-eye-open"></i></a>&nbsp;&nbsp; 
                                     &nbsp;&nbsp;<a href="action.php?bill_id=<?php echo $row['id']; ?>" class="delete"><i class="glyphicon glyphicon-trash"></i></a>
@@ -194,4 +204,43 @@ $('.drop').on('change', function (e) {
     $('#submitBill').prop('disabled', false);
   }
 });
+$('select').on('change', function (e) {
+    var selectedVal = $('option:selected', this).val();
+    alert(selectedVal);
+    if(selectedVal == "Approve")
+    {
+        var bill = $(this).attr("amount");
+        $('#bill_amount').val(bill);
+        $("#leave_modal").modal('show');
+    }    
+});
 </script>
+<div class="modal fade" id="leave_modal" role="dialog" style="z-index: 9999;" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Bill calculation</h5>
+            </div>
+        <div class="modal-body">
+            <form>
+                <div class="form-group">
+                    <label for="recipient-name" class="form-control-label">Bill Amount:</label>
+                    <input type="text" name="bill_amount" id="bill_amount"  class="form-control input-sm col-md-3">
+                </div>
+                <div class="form-group">
+                    <label for="recipient-name" class="form-control-label">Approve Amount:</label>
+                    <input type="text" name="approve_amount" id="approve_amount" class="form-control input-sm col-md-3">
+                </div>
+                <div class="form-group">
+                    <label for="message-text" class="form-control-label">Bill Discription:</label>
+                    <textarea class="form-control input-sm" name="bill_discription" id="bill_discription"></textarea>
+                </div>
+            </form>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-primary">Submit</button>
+        </div>
+        </div>
+    </div>
+</div>

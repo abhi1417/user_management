@@ -419,32 +419,32 @@ if ($_POST) {
 	$conn->close();
 	header("Location: news_view.php?id={$id}"); /* Redirect browser */
 	exit(); 
-}
-
-/*Update news*/
-else if (isset($_POST['updateNews'])) 
-{
-	$news_id     = $_POST['id'];
-	$tittle      = $_POST['tittle'];
-	$image       = $_FILES['image']['name'];
-	$description = $_POST['description'];
-	$news_date   = $_POST['news_date'] ;		
-
-	$news_from_date = date('Y-m-d', strtotime( $news_date ));
-
-	$target_dir = "assets/img/"; 
-	$target_file = $target_dir . basename($_FILES["image"]["name"]); 
-	$uploadOk = 1;
-	$imageFileType = pathinfo($target_file,PATHINFO_EXTENSION); 
-			// Check if image file is a actual image or fake image
-	$check = getimagesize($_FILES["image"]["tmp_name"]); 
-	if($check !== false) {
-		echo "File is an image - " . $check["mime"] . ".";
-		$uploadOk = 1;
-	} else {
-		echo "File is not an image.";
-		$uploadOk = 0;
 	}
+
+	/*Update news*/
+	else if (isset($_POST['updateNews'])) 
+	{
+		$news_id     = $_POST['id'];
+		$tittle      = $_POST['tittle'];
+		$image       = $_FILES['image']['name'];
+		$description = $_POST['description'];
+		$news_date   = $_POST['news_date'] ;		
+
+		$news_from_date = date('Y-m-d', strtotime( $news_date ));
+
+		$target_dir = "assets/img/"; 
+		$target_file = $target_dir . basename($_FILES["image"]["name"]); 
+		$uploadOk = 1;
+		$imageFileType = pathinfo($target_file,PATHINFO_EXTENSION); 
+				// Check if image file is a actual image or fake image
+		$check = getimagesize($_FILES["image"]["tmp_name"]); 
+		if($check !== false) {
+			echo "File is an image - " . $check["mime"] . ".";
+			$uploadOk = 1;
+		} else {
+			echo "File is not an image.";
+			$uploadOk = 0;
+		}
 			// Check if file already exists
 			/*if (file_exists($target_file)) {
 				echo "Sorry, file already exists.";
@@ -536,10 +536,7 @@ else if (isset($_POST['updateNews']))
 			$fileSave = " , bill_file_path = '".$bill_file_path."'";
 		}
 
-
-
-		
-		echo $query = "UPDATE user_bill SET user_name = '".$user_name."', bill_name = '".$bill_name."', bill_date = '".$bill_from_date."', bill_amount = '".$bill_amount."',  bill_description = '".$bill_description."' $fileSave WHERE id = '".$bill_id."'"; 
+		$query = "UPDATE user_bill SET user_name = '".$user_name."', bill_name = '".$bill_name."', bill_date = '".$bill_from_date."', bill_amount = '".$bill_amount."',  bill_description = '".$bill_description."' $fileSave WHERE id = '".$bill_id."'"; 
 		$result = $conn->query($query);
 		$row_count =  mysqli_affected_rows($conn);
 		if($row_count > 0 )
@@ -549,6 +546,24 @@ else if (isset($_POST['updateNews']))
 			header("location: bill_edit.php?bill_id={$bill_id}");
 		}
 	}
+
+	/*bill approved*/
+	elseif (isset($_POST['submitBill'])) {
+		
+		$id = $_POST['id'];
+		$approve_amount = $_POST['approve_amount'];
+		$approve_description = $_POST['approve_description'];
+
+		echo $bill_query = "UPDATE user_bill SET approve_amount = '".$approve_amount."', approve_description = '".$approve_description."' WHERE id ='".$id."'";
+		$result = $conn->query($bill_query);
+		$row_count =  mysqli_affected_rows($conn);
+		if($row_count > 0 )
+		{
+			header("location: bill_view.php");
+		} else{
+			header("location: bill_view.php?id={$id}");
+		}
+	}	
 }
 
 

@@ -153,13 +153,15 @@ include("includes/header.php");
                                 <td><?php echo $row['bill_amount']; ?></td> 
                                 <td><?php echo $row['bill_file_path']; ?></td> 
                                 <td><?php echo $row['bill_description']; ?></td> 
+                                <?php if ($_SESSION['user_type'] == 'Admin') { ?>
                                 <td>
-                                    <select amount="<?php echo $row['bill_amount'];?>">
+                                    <select id="bills_id" billAmtId="<?php echo $row['id']?>" amount="<?php echo $row['bill_amount'];?>">
                                         <option value="">Select</option>
                                         <option value="Approve">Approved</option>
                                         <option value="UnApprove">UnApproved</option>
                                     </select>
                                 </td>  
+                                <?php } ?>
                                 <?php if ($_SESSION['user_type'] == 'Admin') { ?>
                                 <td>&nbsp;&nbsp;<a href="bill_edit.php?bill_id=<?php echo $row['id'];?>"><i class="glyphicon glyphicon-eye-open"></i></a>&nbsp;&nbsp; 
                                     &nbsp;&nbsp;<a href="action.php?bill_id=<?php echo $row['id']; ?>" class="delete"><i class="glyphicon glyphicon-trash"></i></a>
@@ -181,39 +183,72 @@ include("includes/header.php");
 
 <?php include("includes/footer.php"); ?>
 <script>
-$('#bill_date').on('change', function (e) {
-    var selectedVal = $('option:selected', this).val();
-    if(selectedVal == "custom")
-    {
-        $('#custom_date').show();
-    }
-    else
-    {
-        $('#custom_date').hide();
-    }
+$( document ).ready(function() {
+    $('#bill_date').on('change', function (e) {
+        var selectedVal = $('option:selected', this).val();
+        if(selectedVal == "custom")
+        {
+            $('#custom_date').show();
+        }
+        else
+        {
+            $('#custom_date').hide();
+        }
+    });
+    $('.drop').on('change', function (e) {
+      var selectDrop = $('option:selected',this).val();
+      //alert(selectDrop);
+      if(selectDrop == "")
+      {
+        $('#submitBill').prop('disabled', true);
+      } 
+      else
+      {
+        $('#submitBill').prop('disabled', false);
+      }
+    });
+    $('select').on('change', function (e) {
+        var selectedVal1 = $('option:selected', this).val();
+        if(selectedVal1 == "Approve")
+        {
+            var id = $(this).attr("billAmtId");
+            var bill = $(this).attr("amount");
+            $('#id').val(id);
+            $('#bill_amount').val(bill);
+            $("#leave_modal").modal('show');
+        }   
+
+     
+    });
+    $('#approve_amount').keyup(function() {
+
+        var bill = $("#bill_amount").val();
+        var apr = $.trim($(this).val());        
+        console.log(apr);
+        if(parseFloat(apr) > parseFloat(bill)){
+            $(".apr_amount").html("Approve Amount is not Greater than to Bill Amount");
+            $('#submitBill1').prop('disabled', true);
+        } 
+        else if(apr == '')
+        {
+           $('#submitBill1').prop('disabled', false); 
+        }
+        else {
+           $(".apr_amount").html("");
+           $('#submitBill1').prop('disabled', false);
+        }   
+    });
+    $('#closeBill').click(function(){
+        $('select').prop('selectedIndex',0);
+        $("#approve_amount").val('');
+        $("#approve_description").val('');
+    });
+    $( "#submitBill1" ).click(function() {
+      
+      $( "#form1" ).submit();
+    });
 });
-$('.drop').on('change', function (e) {
-  var selectDrop = $('option:selected',this).val();
-  //alert(selectDrop);
-  if(selectDrop == "")
-  {
-    $('#submitBill').prop('disabled', true);
-  } 
-  else
-  {
-    $('#submitBill').prop('disabled', false);
-  }
-});
-$('select').on('change', function (e) {
-    var selectedVal = $('option:selected', this).val();
-    alert(selectedVal);
-    if(selectedVal == "Approve")
-    {
-        var bill = $(this).attr("amount");
-        $('#bill_amount').val(bill);
-        $("#leave_modal").modal('show');
-    }    
-});
+
 </script>
 <div class="modal fade" id="leave_modal" role="dialog" style="z-index: 9999;" data-backdrop="static" data-keyboard="false">
     <div class="modal-dialog" role="document">
@@ -221,26 +256,28 @@ $('select').on('change', function (e) {
             <div class="modal-header">
                 <h5 class="modal-title" id="exampleModalLabel">Bill calculation</h5>
             </div>
-        <div class="modal-body">
-            <form>
-                <div class="form-group">
-                    <label for="recipient-name" class="form-control-label">Bill Amount:</label>
-                    <input type="text" name="bill_amount" id="bill_amount"  class="form-control input-sm col-md-3">
-                </div>
-                <div class="form-group">
-                    <label for="recipient-name" class="form-control-label">Approve Amount:</label>
-                    <input type="text" name="approve_amount" id="approve_amount" class="form-control input-sm col-md-3">
-                </div>
-                <div class="form-group">
-                    <label for="message-text" class="form-control-label">Bill Discription:</label>
-                    <textarea class="form-control input-sm" name="bill_discription" id="bill_discription"></textarea>
-                </div>
-            </form>
-        </div>
-        <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-            <button type="button" class="btn btn-primary">Submit</button>
-        </div>
+            <div class="modal-body">
+                <form action="action.php" name="form1" id="form1" method="post">
+                    <input type="hidden" name="id" id="id" value="" />  
+                    <div class="form-group">
+                        <label for="recipient-name" class="form-control-label">Bill Amount:</label>
+                        <input type="text" name="bill_amount" id="bill_amount"  class="form-control input-sm col-md-3">
+                    </div>
+                    <div class="form-group">
+                        <label for="recipient-name" class="form-control-label">Approve Amount:</label>
+                        <input type="text" name="approve_amount" id="approve_amount" class="form-control input-sm col-md-3">
+                    </div>
+                    <span class="apr_amount"></span>
+                    <div class="form-group">
+                        <label for="message-text" class="form-control-label">Bill Discription:</label>
+                        <textarea class="form-control input-sm" name="approve_description" id="approve_description"></textarea>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" name="closeBill" id="closeBill" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="submit" name ="submitBill" id="submitBill1" class="btn btn-primary drop1" disabled>Submit</button>
+                    </div>
+                </form>
+            </div>
         </div>
     </div>
 </div>

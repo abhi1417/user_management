@@ -63,14 +63,6 @@ include("includes/sidebar.php");
                                     </select>
                                 </div>
                             </div>
-                            <!--<div class="form-group">
-                                <label class="col-sm-3 control-label" for="example-input-small">Leave Balance<span class="text-danger">*</span></label>
-                                <div class="col-sm-2"></div>
-                                <div class="col-sm-6"> -->
-                                        <!--<?php //echo isset($)?ucfirst($):''; ?>
-                                        <input type="hidden" name="" value="<?php //echo isset($)?$:''; ?>">-->
-                               <!--  </div>
-                            </div> -->
                             <div class="form-group">
                                 <label class="col-sm-3 control-label" for="example-input-small">Form Date<span class="text-danger">*</span></label>
                                 <div class="col-sm-2"></div>

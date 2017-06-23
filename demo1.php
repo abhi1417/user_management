@@ -275,5 +275,3 @@ function onSelectChange(){
    document.getElementById('form_entries').submit();
 }
 </script>
-<?php include("includes/footer.php"); ?>
-

@@ -7,6 +7,27 @@ include("includes/header.php");
 .modal-content {
     margin: 110px;
 }
+i.mdi.mdi-pencil-box-outline {
+    color: brown;
+}
+a {
+    color: #0254EB
+}
+a:visited {
+    color: #0254EB
+}
+a.morelink {
+    text-decoration:none;
+    outline: none;
+}
+.morecontent span {
+    display: none;
+}
+.comment {
+    width: 400px;
+    background-color: #f0f0f0;
+    margin: 10px;
+}
 </style>
 <div class="container">                                               
     <div class="row">
@@ -69,7 +90,7 @@ include("includes/header.php");
 
 
 
-    $query  = "SELECT * FROM user_bill WHERE status ='1' ";
+    $query  = "SELECT * FROM user_bill ";
     $where = '';
     $currentMonth = '';
     $status = '';
@@ -150,16 +171,40 @@ include("includes/header.php");
                                 <td><?php echo $row['user_name']; ?></td> 
                                 <td><?php echo $row['bill_name']; ?></td> 
                                 <td><?php echo $row['bill_date']; ?></td> 
-                                <td><?php echo $row['bill_amount']; ?></td> 
+                                <td>
+                                    <?php echo $row['bill_amount'];
+                                    if($status == 1){
+                                       ?>
+                                        &nbsp;&nbsp;&nbsp;&nbsp;<i class="mdi mdi-pencil-box-outline" appAmtBill="<?php echo $row['approve_amount'];?>" appDscBill="<?php echo $row['approve_description'];?>"></i>
+                                        <?php
+                                        }
+                                    ?>
+                                </td> 
                                 <td><?php echo $row['bill_file_path']; ?></td> 
-                                <td><?php echo $row['bill_description']; ?></td> 
+                                <td><?php 
+                                    echo substr($row['bill_description'],0, 5).' ';
+                                    if(strlen($row['bill_description']) > 5)
+                                    {
+                                        echo "<a href='javascript:void(0)'> ...  Readmore</a>";
+                                    }                                   
+                                     $row['bill_description']; ?>
+                                     <span class="showText" style="display:none;"><?php echo $row['bill_description']; ?></span>
+                                 </td> 
                                 <?php if ($_SESSION['user_type'] == 'Admin') { ?>
                                 <td>
+                                    <?php
+                                    if($status == 1){
+                                        echo "Approved";
+                                    } else {
+                                    ?>    
                                     <select id="bills_id" billAmtId="<?php echo $row['id']?>" amount="<?php echo $row['bill_amount'];?>">
                                         <option value="">Select</option>
                                         <option value="Approve">Approved</option>
                                         <option value="UnApprove">UnApproved</option>
                                     </select>
+                                    <?php
+                                    }
+                                    ?>
                                 </td>  
                                 <?php } ?>
                                 <?php if ($_SESSION['user_type'] == 'Admin') { ?>
@@ -216,9 +261,7 @@ $( document ).ready(function() {
             $('#id').val(id);
             $('#bill_amount').val(bill);
             $("#leave_modal").modal('show');
-        }   
-
-     
+        }       
     });
     $('#approve_amount').keyup(function() {
 
@@ -247,8 +290,18 @@ $( document ).ready(function() {
       
       $( "#form1" ).submit();
     });
+    $('i').click(function (e) { 
+           var app_amt = $(this).attr("appAmtBill");
+           var app_dec = $(this).attr("appDscBill");           
+           $("#approve_amt").modal('show');
+           $('#approve_amount1').text(app_amt);
+           $('#approve_description1').text(app_dec);               
+    });    
+    $('a').click(toggleIt);
+    function toggleIt() {
+        $(this).toggle();
+    }
 });
-
 </script>
 <div class="modal fade" id="leave_modal" role="dialog" style="z-index: 9999;" data-backdrop="static" data-keyboard="false">
     <div class="modal-dialog" role="document">
@@ -277,6 +330,31 @@ $( document ).ready(function() {
                         <button type="submit" name ="submitBill" id="submitBill1" class="btn btn-primary drop1" disabled>Submit</button>
                     </div>
                 </form>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="approve_amt" role="dialog" style="z-index: 9999;" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Bill calculation</h5>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="recipient-name" class="form-control-label"  >Approve Amount:</label>
+                    <span id="approve_amount1"></span>
+                    <input type="hidden" name="approve_amount" class="form-control input-sm col-md-3">
+                </div>
+                <span class="apr_amount"></span>
+                <div class="form-group">
+                    <label for="message-text" class="form-control-label" >Bill Discription:</label>
+                    <span id="approve_description1"></span>
+                    <textarea class="form-control input-sm hide" id="approve_description" name="approve_description"></textarea>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" name="closeBill" id="closeBill" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>                
             </div>
         </div>
     </div>

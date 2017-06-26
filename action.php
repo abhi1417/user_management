@@ -299,9 +299,7 @@ if ($_POST) {
 			$id = $_SESSION['id'] = $userData['id'];
 			$_SESSION['email'] = $userData['email'];
 			$_SESSION['user_type'] = $userData['user_type'];
-			$_SESSION['first_name'] = $userData['first_name'];
-			//echo $userData['user_type'];
-			//print_r($userData);die;
+			$_SESSION['first_name'] = $userData['first_name'];			
 			if($userData['user_type'] == 'Admin') {			
 				header("location: employee_reg.php");
 
@@ -351,8 +349,8 @@ if ($_POST) {
 			echo "Error: " . $sql . "<br>" . $conn->error;
 		}
 		header("Location: leave_view.php?id={$id}"); /* Redirect browser */
-		//$conn->close();
-		//exit(); 
+		$conn->close();
+		exit(); 
 	}
 
 	/*News Section*/
@@ -395,7 +393,7 @@ if ($_POST) {
 			echo "Sorry, only JPG, JPEG, PNG & GIF files are allowed.";
 		$uploadOk = 0;
 	}
-			// Check if $uploadOk is set to 0 by an error
+	// Check if $uploadOk is set to 0 by an error
 	if ($uploadOk == 0) {
 		echo "Sorry, your file was not uploaded.";
 				// if everything is ok, try to upload file

@@ -18,7 +18,12 @@ $newstring = str_replace("FxB-", "", $string);
 
     .error{
       color : red;
-  }
+  }.required_error{
+        border : 1px solid red;
+      }
+      .validaion{
+        color: red;
+      }
 
   </style>
 
@@ -32,7 +37,7 @@ $newstring = str_replace("FxB-", "", $string);
                     <h4 class="header-title m-t-0">Personal Information</h4>
                     <!-- Pesronal Information Start -->
                     <div class="p-20 m-b-20">
-                        <form role="form" action="action.php" class="form-validation" method="POST">
+                        <form role="form" name="myform" action="action.php" class="form-validation" onsubmit="return package_validation(myform)" method="POST">
                                 <!-- <div class="form-group col-lg-4">
                                     <label for="firstName">Profile Picture<span class="text-danger">*</span></label>
                                         <div class="main-img-preview"> <img class="thumbnail img-preview" width="150" src="assets/images/profile.jpg" title="Preview Logo"></div>
@@ -49,69 +54,76 @@ $newstring = str_replace("FxB-", "", $string);
                                     <label class="control-label" for="example-input1-group1">Employee Id</label>
                                     <div class="input-group">
                                         <span class="input-group-addon">FxB</span>
-                                        <input type="text" id="employee_id" name="employee_id" class="form-control" placeholder="Id" value="<?php echo $newstring; ?>">
-                                        <span class="error"><?php if(isset($_GET["msg_employee_id"])) { echo $_GET["msg_employee_id"]; } ?></span>
+                                        <input type="text" id="employee_id" name="employee_id" class="form-control required" placeholder="Id" value="<?php echo $newstring; ?>">
+                                        <!-- <span></span> -->
+                                        <span class="error error_msg"><?php if(isset($_GET["msg_employee_id"])) { echo $_GET["msg_employee_id"]; } ?></span> 
                                     </div>
                                 </div> 
 
                                 <div class="form-group col-lg-6">
                                     <label for="first_name">First Name<span class="text-danger">*</span></label>
                                     <input type="text" name="first_name" parsley-trigger="change" 
-                                    placeholder="Enter user first name" class="form-control" id="first_name" value="<?php if(isset($var['first_name'])){ echo $var['first_name']; }?>">
+                                    placeholder="Enter user first name" class="form-control required" id="first_name" value="<?php if(isset($var['first_name'])){ echo $var['first_name']; }?>">
+                                    <span class=".error_msg"></span>
                                 </div>
 
                                 <div class="form-group col-lg-6">
                                     <label for="last_name">Last Name<span class="text-danger">*</span></label>
                                     <input type="text" name="last_name" parsley-trigger="change" 
-                                    placeholder="Enter user last name" class="form-control" id="last_name" value="<?php if(isset($var['last_name'])){ echo $var['last_name']; }?>">
+                                    placeholder="Enter user last name" class="form-control required" id="last_name" value="<?php if(isset($var['last_name'])){ echo $var['last_name']; }?>">
+                                    <span class=".error_msg"></span>
                                 </div>  
 
                                 <div class="form-group col-lg-6">
                                     <label for="email">Email address<span class="text-danger">*</span></label>
                                     <input type="text" name="email" parsley-trigger="change" 
-                                    placeholder="Enter email" class="form-control" id="email" value="<?php if(isset($var['email'])){ echo $var['email']; }?>">
+                                    placeholder="Enter email" class="form-control required" id="email" value="<?php if(isset($var['email'])){ echo $var['email']; }?>">
                                     <span class="error"><?php if(isset($_GET["msg_email"])) { echo $_GET["msg_email"]; } ?></span>
                                 </div>
 
                                 <div class="form-group col-lg-6">
                                     <label for="password">Password<span class="text-danger">*</span></label>
                                     <input id="password" type="password" placeholder="Password" name="password" 
-                                    class="form-control" value="<?php if(isset($var['password'])){ echo $var['password']; }?>">
+                                    class="form-control required" value="<?php if(isset($var['password'])){ echo $var['password']; }?>">
+                                    <span class=".error_msg"></span>
                                 </div>   
 
                                 <div class="form-group col-lg-6">
                                     <label for="personal_number">Personal Number<span class="text-danger">*</span></label>
                                     <input id="personal_number" type="number" placeholder="Number" name="personal_number" 
-                                    class="form-control" value="<?php if(isset($var['personal_number'])){ echo $var['personal_number']; }?>">
+                                    class="form-control required" value="<?php if(isset($var['personal_number'])){ echo $var['personal_number']; }?>">
                                     <span class="error"><?php if(isset($_GET["msg_personal_num"])) { echo $_GET["msg_personal_num"]; } ?></span>
                                 </div>
 
                                 <div class="form-group col-lg-6">
                                     <label for="emergency_number">Emergency number<span class="text-danger">*</span></label>
                                     <input id="emergency_number" type="number" placeholder="Emergency number" name="emergency_number" 
-                                    class="form-control" value="<?php if(isset($var['emergency_number'])){ echo $var['emergency_number']; }?>">
+                                    class="form-control required" value="<?php if(isset($var['emergency_number'])){ echo $var['emergency_number']; }?>">
+                                    <span class=".error_msg"></span>
                                 </div>
 
                                 <div class="form-group col-lg-6">
                                     <label for="residental_address">Address Street 1<span class="text-danger">*</span></label>
-                                    <input type="text" name="residental_address" parsley-trigger="change" 
-                                    placeholder="Enter user current address" class="form-control" id="residental_address" value="<?php if(isset($var['residental_address'])){ echo $var['residental_address']; }?>">
+                                    <input type="text" name="residental_address" parsley-trigger="change" placeholder="Enter user current address" class="form-control required" id="residental_address" value="<?php if(isset($var['residental_address'])){ echo $var['residental_address']; }?>">
+                                    <span class=".error_msg"></span>
                                 </div>
 
                                 <div class="form-group col-lg-6">
                                     <label for="home_address">Address Street 2<span class="text-danger">*</span></label>
                                     <input type="text" name="home_address" parsley-trigger="change" 
-                                    placeholder="Enter user parmanent address" class="form-control" id="home_address" value="<?php if(isset($var['home_address'])){ echo $var['home_address']; }?>">
+                                    placeholder="Enter user parmanent address" class="form-control required" id="home_address" value="<?php if(isset($var['home_address'])){ echo $var['home_address']; }?>">
+                                    <span class=".error_msg"></span>
                                 </div> 
 
                                 <div class="form-group col-lg-6">
                                     <label for="marital_status">Marital Status<span class="text-danger">*</span></label>
                                     <div>
-                                        <select id="marital_status" name="marital_status" class="form-control" > 
+                                        <select id="marital_status" name="marital_status" class="form-control required" > 
                                             <option value="">Select Marital Status</option>
                                             <option value="married" <?php if(isset($var['marital_status']) && $var['marital_status'] == 'married')echo 'selected = "selected"';?> >Married</option>
                                             <option value="unmarried" <?php if(isset($var['marital_status']) && $var['marital_status'] == 'unmarried')echo 'selected = "selected"';?> >Unmarried</option>        
                                         </select>
+                                        <span class=".error_msg"></span>
                                     </div>
                                 </div>
 
@@ -125,6 +137,7 @@ $newstring = str_replace("FxB-", "", $string);
                                             <input type="radio" id="inlineRadio2" value="female" name="gender" <?php if (isset($var['gender']) && ($var['gender']) == "female") echo "checked"; ?> checked>
                                             <label for="inlineRadio2"> Female </label>
                                         </div>
+                                        <span class=".error_msg"></span>
                                     </label>    
                                 </div> 
 
@@ -132,8 +145,8 @@ $newstring = str_replace("FxB-", "", $string);
                                     <label for="date_of_birth">Date Of Birth<span class="text-danger">*</span></label>
                                     <div>   
                                         <div class="input-group">
-                                            <input type="text" class="form-control" placeholder="yyyy/mm/dd" id="datepicker-autoclose" name="date_of_birth" id="date_of_birth" value="<?php if(isset($var['date_of_birth'])){ echo $var['date_of_birth']; }?>">
-                                            <span class="input-group-addon bg-custom b-0"><i class="mdi mdi-calendar text-white"></i></span>
+                                            <input type="text" class="form-control required" placeholder="yyyy/mm/dd" id="datepicker-autoclose" name="date_of_birth" id="date_of_birth" value="<?php if(isset($var['date_of_birth'])){ echo $var['date_of_birth']; }?>">
+                                            <span class="input-group-addon bg-custom b-0 error_msg"><i class="mdi mdi-calendar text-white"></i></span>
                                         </div>
                                     </div>
                                 </div>
@@ -145,9 +158,8 @@ $newstring = str_replace("FxB-", "", $string);
                                 <div class="form-group col-lg-6"></div>
                                 <!-- Personal information end -->
 
-
-
                                 <h4 class="header-title m-t-0">Office Information</h4>
+
                                 <!-- Office information start -->
                                 <div class="form-group col-lg-6"></div>
                                 <div class="form-group col-lg-6"></div>
@@ -155,7 +167,7 @@ $newstring = str_replace("FxB-", "", $string);
                                 <div class="form-group col-lg-6">
                                     <label for="role_type">Role Type<span class="text-danger">*</span></label>
                                     <div>
-                                        <select id="role_type" name="role_type" class="form-control" > 
+                                        <select id="role_type" name="role_type" class="form-control required" > 
                                             <option value="">Select Role</option>
                                             <option value="trainee" <?php if(isset($var['role_type']) && $var['role_type'] == 'trainee')echo 'selected = "selected"';?> >Trainee</option>
                                             <option value="developer" <?php if(isset($var['role_type']) && $var['role_type'] == 'developer')echo 'selected = "selected"';?> >Developer</option>        
@@ -163,13 +175,14 @@ $newstring = str_replace("FxB-", "", $string);
                                             <option value="manager" <?php if(isset($var['role_type']) && $var['role_type'] == 'manager')echo 'selected = "selected"';?> >Manager</option>
                                             <option value="hr" <?php if(isset($var['role_type']) && $var['role_type'] == 'hr')echo 'selected = "selected"';?> >HR</option>        
                                         </select>
+                                        <span class=".error_msg"></span>
                                     </div>
                                 </div>
 
                                 <div class="form-group col-lg-6">
                                     <label for="employee_role">Employee Role<span class="text-danger">*</span></label>
                                     <div>
-                                        <select id="employee_role" name="employee_role" class="form-control" > 
+                                        <select id="employee_role" name="employee_role" class="form-control required" > 
                                             <option value="">Select Role</option>
                                             <option value="trainee" <?php if(isset($var['employee_role']) && $var['employee_role'] == 'trainee')echo 'selected = "selected"';?> >Trainee</option>
                                             
@@ -177,7 +190,6 @@ $newstring = str_replace("FxB-", "", $string);
                                             <option value="developer php" <?php if(isset($var['employee_role']) && $var['employee_role'] == 'developer php')echo 'selected = "selected"';?> >Developer PHP</option>        
                                             <option value="developer java" <?php if(isset($var['employee_role']) && $var['employee_role'] == 'developer java')echo 'selected = "selected"';?> >Developer JAVA</option>        
                                             <option value="developer android" <?php if(isset($var['employee_role']) && $var['employee_role'] == 'developer android')echo 'selected = "selected"';?> >Developer Android</option>
-
                                             <option value="senior developer ios" <?php if(isset($var['employee_role']) && $var['employee_role'] == 'senior developer ios')echo 'selected = "selected"';?>>Senior Developer IOS</option>        
                                             <option value="senior developer php" <?php if(isset($var['employee_role']) && $var['employee_role'] == 'senior developer php')echo 'selected = "selected"';?>>Senior Developer PHP</option>        
                                             <option value="senior developer java" <?php if(isset($var['employee_role']) && $var['employee_role'] == 'senior developer java')echo 'selected = "selected"';?> >Senior Developer JAVA</option>        
@@ -186,26 +198,28 @@ $newstring = str_replace("FxB-", "", $string);
                                             <option value="manager" <?php if(isset($var['employee_role']) && $var['employee_role'] == 'manager')echo 'selected = "selected"';?> >Manager</option>
                                             <option value="hr" <?php if(isset($var['employee_role']) && $var['employee_role'] == 'hrs')echo 'selected = "selected"';?> >HR</option>
                                         </select>
+                                        <span class=".error_msg"></span>
                                     </div>
                                 </div>
 
                                 <div class="form-group col-lg-6">
                                     <label for="project_team">Project Team<span class="text-danger">*</span></label>
                                     <div>
-                                        <select id="project_team" name="project_team" class="form-control" > 
+                                        <select id="project_team" name="project_team" class="form-control required" > 
                                             <option value="">Select Project Team</option>
                                             <option value="team ios" <?php if(isset($var['project_team']) && $var['project_team'] == 'team ios')echo 'selected = "selected"';?> >Team IOS</option>
                                             <option value="team php" <?php if(isset($var['project_team']) && $var['project_team'] == 'team php')echo 'selected = "selected"';?> >Team PHP</option>        
                                             <option value="team android" <?php if(isset($var['project_team']) && $var['project_team'] == 'team android')echo 'selected = "selected"';?> >Team Android</option>
                                             <option value="team java" <?php if(isset($var['project_team']) && $var['project_team'] == 'team java')echo 'selected = "selected"';?> >Team JAVA</option>
                                         </select>
+                                        <span class=".error_msg"></span>
                                     </div>
                                 </div> 
 
                                 <div class="form-group col-lg-6">
                                     <label for="education">Education<span class="text-danger">*</span></label>
                                     <div>
-                                        <select id="education" name="education" class="form-control" > 
+                                        <select id="education" name="education" class="form-control required" > 
                                             <option value="">Select Project Team</option>
                                             <option value="BCA" <?php if(isset($var['education']) && $var['education'] == 'BCA')echo 'selected = "selected"';?> >BCA</option>
                                             <option value="BE(CS)" <?php if(isset($var['education']) && $var['education'] == 'BE(CS)')echo 'selected = "selected"';?> >BE(CS)</option>        
@@ -217,13 +231,14 @@ $newstring = str_replace("FxB-", "", $string);
                                             <option value="ME(CS)" <?php if(isset($var['education']) && $var['education'] == 'ME(CS)')echo 'selected = "selected"';?> >ME(CS)</option>
                                             <option value="ME(EC)" <?php if(isset($var['education']) && $var['education'] == 'ME(EC)')echo 'selected = "selected"';?> >ME(EC)</option>
                                         </select>
+                                        <span class=".error_msg"></span>
                                     </div>
                                 </div> 
 
                                 <div class="form-group col-lg-6">
                                     <label for="state">State<span class="text-danger">*</span></label>
                                     <div>
-                                        <select id="state" name="state" class="form-control" > 
+                                        <select id="state" name="state" class="form-control required" > 
                                             <option value="">Select State</option>
                                             <option value="madhya pradesh" <?php if(isset($var['state']) && $var['state'] == 'madhya pradesh')echo 'selected = "selected"';?> >Madhya Pradesh</option>
                                             <option value="andhra pradesh" <?php if(isset($var['state']) && $var['state'] == 'andhra pradesh')echo 'selected = "selected"';?> >Andhra Pradesh</option>        
@@ -234,13 +249,14 @@ $newstring = str_replace("FxB-", "", $string);
                                             <option value="haryana" <?php if(isset($var['state']) && $var['state'] == 'haryana')echo 'selected = "selected"';?> >Haryana</option>
                                             <option value="gujrat" <?php if(isset($var['state']) && $var['state'] == 'gujrat')echo 'selected = "selected"';?> >Gujrat</option>
                                         </select>
+                                        <span class=".error_msg"></span>
                                     </div>
                                 </div>
 
                                 <div class="form-group col-lg-6">
                                     <label for="city">City<span class="text-danger">*</span></label>
                                     <div>
-                                        <select id="city" name="city" class="form-control" > 
+                                        <select id="city" name="city" class="form-control required" > 
                                             <option value="">Select City</option>
                                             <option value="indore" <?php if(isset($var['city']) && $var['city'] == 'indore')echo 'selected = "selected"';?> >Indore</option>
                                             <option value="bhopal" <?php if(isset($var['city']) && $var['city'] == 'bhopal')echo 'selected = "selected"';?> >Bhopal</option>        
@@ -252,19 +268,21 @@ $newstring = str_replace("FxB-", "", $string);
                                             <option value="vadodara" <?php if(isset($var['city']) && $var['city'] == 'vadodara')echo 'selected = "selected"';?> >Vadodara</option>
                                             <option value="chennai" <?php if(isset($var['city']) && $var['city'] == 'chennai')echo 'selected = "selected"';?>  >Chennai</option>
                                         </select>
+                                        <span class=".error_msg"></span>
                                     </div>
                                 </div>
 
                                 <div class="form-group col-lg-6">
                                     <label for="nationality">Nationality<span class="text-danger">*</span></label>
                                     <div>
-                                        <select id="nationality" name="nationality" class="form-control" > 
+                                        <select id="nationality" name="nationality" class="form-control required" > 
                                             <option value="">Select Nationality</option>
                                             <option value="indian" <?php if(isset($var['nationality']) && $var['nationality'] == 'indian')echo 'selected = "selected"';?> >Indian</option>
                                             <option value="japanese" <?php if(isset($var['nationality']) && $var['nationality'] == 'japanese')echo 'selected = "selected"';?> >Japanese</option>        
                                             <option value="sri_lankan" <?php if(isset($var['nationality']) && $var['nationality'] == 'sri_lankan')echo 'selected = "selected"';?> >Sri Lankan</option>
                                             <option value="russian" <?php if(isset($var['nationality']) && $var['nationality'] == 'russian')echo 'selected = "selected"';?> >Russian</option>
                                         </select>
+                                        <span class=".error_msg"></span>
                                     </div>
                                 </div>
 
@@ -272,7 +290,7 @@ $newstring = str_replace("FxB-", "", $string);
                                     <label for="joining_date">Joining Date<span class="text-danger">*</span></label>
                                     <div>
                                         <div class="input-group">
-                                            <input type="text" class="form-control" placeholder="yyyy/mm/dd" id="datepicker" name="joining_date" id="joining_date" value="<?php if(isset($var['joining_date'])){ echo $var['joining_date']; }?>">
+                                            <input type="text" class="form-control required" placeholder="yyyy/mm/dd" id="datepicker" name="joining_date" id="joining_date" value="<?php if(isset($var['joining_date'])){ echo $var['joining_date']; }?>">
                                             <span class="input-group-addon bg-custom b-0"><i class="mdi mdi-calendar text-white"></i></span>
                                         </div>
                                     </div>
@@ -281,13 +299,14 @@ $newstring = str_replace("FxB-", "", $string);
                                 <div class="form-group col-lg-6">
                                     <label for="bond">Bond<span class="text-danger">*</span></label>
                                     <div>
-                                        <select id="bond" name="bond" class="form-control" > 
+                                        <select id="bond" name="bond" class="form-control required" > 
                                             <option value="">Bond Type</option>
                                             <option value="fresher">Fresher</option>
                                             <option value="1" <?php if(isset($var['bond']) && $var['bond'] == '1')echo 'selected = "selected"';?> >1 year</option>        
                                             <option value="2" <?php if(isset($var['bond']) && $var['bond'] == '2')echo 'selected = "selected"';?> >2 year</option>
                                             <option value="3" <?php if(isset($var['bond']) && $var['bond'] == '3')echo 'selected = "selected"';?> >3 year</option>
                                         </select>
+                                        <span class=".error_msg"></span>
                                     </div>
                                 </div>
 
@@ -295,9 +314,10 @@ $newstring = str_replace("FxB-", "", $string);
                                     <label for="bond_duration">Bond Duration<span class="text-danger">*</span></label>
                                     <div>
                                         <div class="input-daterange input-group" id="date-range">
-                                            <input type="text" class="form-control" name="bond_duration_from" id="bond_duration_from" value="<?php if(isset($var['bond_duration_from'])){ echo $var['bond_duration_from']; }?>">
+                                            <input type="text" class="form-control required" name="bond_duration_from" id="bond_duration_from" value="<?php if(isset($var['bond_duration_from'])){ echo $var['bond_duration_from']; }?>">
                                             <span class="input-group-addon b-0">to</span>
-                                            <input type="text" class="form-control" name="bond_duration_to" id="bond_duration_to" value="<?php if(isset($var['bond_duration_to'])){ echo $var['bond_duration_to']; }?>">
+                                            <input type="text" class="form-control required" name="bond_duration_to" id="bond_duration_to" value="<?php if(isset($var['bond_duration_to'])){ echo $var['bond_duration_to']; }?>">
+                                            <span class=".error_msg"></span>
                                         </div>
                                     </div>
                                 </div> 
@@ -321,20 +341,42 @@ $newstring = str_replace("FxB-", "", $string);
                             </form>
                         </div>
                     </div>
-                    <!-- Col-md-6 end-->
                 </div>   
-                <!-- End row-->
             </div>
-            <!-- end container -->
         </div>    
-        <!-- End #page-right-content -->
         <?php include("includes/footer.php");?>
-
     </body>
-    </html>
+</html>
 <script>
 $("#datepicker-autoclose").datepicker().datepicker("setDate", new Date());
 $("#datepicker").datepicker().datepicker("setDate", new Date());
 $("#bond_duration_from").datepicker().datepicker("setDate", new Date());
-$("#bond_duration_to").datepicker().datepicker("setDate", new Date());
+$("#bond_duration_to").datepicker().datepicker("setDate", new Date());  
+function package_validation()
+{   
+    var Acknowledgement = 1;
+    $('.required').each(function() {
+        if ($(this).val() == "")
+        {
+            $(this).css("border", "1px solid red");
+            $(this).focus();                       
+            $(this).next("span").html('<p class="validaion">This is required Filed.</p>'); 
+
+            Acknowledgement = 0;         
+            return false;
+        } else
+        {
+            Acknowledgement = 1;
+            $(this).css("border", "1px solid green");
+            $(this).next("span").html(''); 
+        }
+    });
+
+    if (Acknowledgement)
+    { 
+        return true;
+    } else {
+        return false;
+    }
+}
 </script>

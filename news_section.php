@@ -4,6 +4,18 @@ include("includes/header.php");
 include("includes/sidebar.php");
      
 ?>
+    <style type="text/css">
+
+    .error{
+      color : red;
+  }.required_error{
+        border : 1px solid red;
+      }
+      .validaion{
+        color: red;
+      }
+
+  </style>
 <!-- START PAGE CONTENT -->
 <div id="page-right-content">
     <div class="container">                                               
@@ -12,7 +24,7 @@ include("includes/sidebar.php");
                 <h4 class="header-title m-t-0">News Section</h4>
                 <!-- Pesronal Information Start -->
                 <div class="p-20 m-b-20">
-                       <form name="myForm" id="myform" action="action.php" method="POST" class="form-horizontal" role="form" enctype="multipart/form-data">                
+                       <form name="myForm" id="myform" action="action.php" method="POST" class="form-horizontal" onsubmit="return package_validation(myform)" role="form" enctype="multipart/form-data">                
                         <div class="form-group">
                             <label for="tittle" class="col-sm-3 control-label">News tittle *</label>
                             <div class="col-xs-4">
@@ -83,5 +95,31 @@ $(document).ready(function() {
         readURL(this);
     });
 });
+function package_validation()
+{   
+    var Acknowledgement = 1;
+    $('.required').each(function() {
+        if ($(this).val() == "")
+        {
+            $(this).css("border", "1px solid red");
+            $(this).focus();                       
+            $(this).next("span").html('<p class="validaion">This is required Filed.</p>'); 
 
+            Acknowledgement = 0;         
+            return false;
+        } else
+        {
+            Acknowledgement = 1;
+            $(this).css("border", "1px solid green");
+            $(this).next("span").html(''); 
+        }
+    });
+
+    if (Acknowledgement)
+    { 
+        return true;
+    } else {
+        return false;
+    }
+}
 </script>

@@ -4,6 +4,11 @@ include("includes/header.php");
 include("function.php");
 
 $limit = 5;  
+if(isset($_GET['dtarea']) || isset($_SESSION['dtarea']))
+{
+ $_SESSION['dtarea'] = $_GET['dtarea']; 
+ $limit = $_SESSION['dtarea']; 
+}
 if (isset($_GET["page"])) 
 {
  $page  = $_GET["page"];
@@ -24,13 +29,14 @@ dateFormate($row['to_date']);
 ?>
 <div class="row p-t-50">
     <div class="container">
-        <form role="form" class="form-horizontal" id="form_entries" action="<?php echo $_SERVER['PHP_SELF']; ?>" method="GET" >
+        <form role="form" id="form1" class="form-horizontal" id="form_entries" action="<?php echo $_SERVER['PHP_SELF']; ?>" method="GET" >
             <div class="col-md-1 form-inline" style="float:left">
-                <select name="dtarea" class="form-control input-sm">
-                    <option value="1">10</option>
-                    <option value="2">25</option>
-                    <option value="3">50</option>
-                    <option value="4">100</option>
+                <select name="dtarea" id = "dtarea" class="form-control input-sm">
+                    <option value="">Select</option>
+                    <option value="2" <?php if($_SESSION['dtarea'] == 2)echo 'selected = "selected"';?>>2</option>
+                    <option value="25" <?php if($_SESSION['dtarea'] == 25)echo 'selected = "selected"';?>>25</option>
+                    <option value="50" <?php if($_SESSION['dtarea'] == 50)echo 'selected = "selected"';?>>50</option>
+                    <option value="100" <?php if($_SESSION['dtarea'] == 100)echo 'selected = "selected"';?>>100</option> 
                 </select>
             </div>
             <div class="col-md-3" style="float:right">
@@ -73,11 +79,7 @@ dateFormate($row['to_date']);
                                     } else {
                                         $data = "N/A";
                                     }
-
-
-
                                     ?>
-
                                     <tr>
                                         <td><?php echo $row['policy_type']; ?></td> 
                                         <td><?php echo $data ?></td>
@@ -93,6 +95,18 @@ dateFormate($row['to_date']);
                           ?>                      
                     </tbody>
                 </table>
+                <?php  
+                    $sql = "SELECT COUNT(*) FROM user_policy";  
+                    $rs_result = $conn->query($sql);
+                    $row = mysqli_fetch_row($rs_result);  
+                    $total_records = $row[0];  
+                    $total_pages = ceil($total_records / $limit);  
+                    $pagLink = "<ul class='pagination pagination-split m-0'>";  
+                    for ($x=1; $x<=$total_pages; $x++) {  
+                     $pagLink .= "<li><a href='policy_view.php?page=".$x."'>".$x."</a></li>";  
+                 };  
+                 echo $pagLink . "</ul>";  
+                 ?>
             </div>
         </div>
     </div>
@@ -105,7 +119,13 @@ dateFormate($row['to_date']);
 <script>
 $("#datepicker1").datepicker({ dateFormat: 'dd/mm/yyyy' });
 $("#datepicker2").datepicker({ dateFormat: 'dd/mm/yyyy' });
+$( "#dtarea" ).click(function() {
+      
+      $( "#form1" ).submit();
+    });
+
 </script>
+
 <!-- <td><?php /*echo $row['policy_type']; ?></td> 
 <td>
     <?php echo !empty($file_path) && file_exists($pdf_fc_path) ? '<a href="'.$pdf_path.'" target="_blank"><i class="glyphicon glyphicon-eye-open"></i></a>' : $comment;?>&nbsp;&nbsp;&nbsp;

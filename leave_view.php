@@ -1,4 +1,5 @@
 <?php 
+session_start();
 include("includes/dbConnection.php");
 include("includes/header.php");
 include("function.php");
@@ -48,14 +49,15 @@ include("function.php");
                                 <select id="leave_name" name="leave_name" class="form-control input-sm srchclass">                                         
                                     <option value="">Select Option</option>                                        
                                     <?php
-                                    $query_leave_type = "SELECT leave_name, id FROM leave_type ";
+                                    $query_leave_type = "SELECT leave_name, id FROM leave_type $WHERE";
                                     $total = 0;
                                     $result_leave_type = $conn->query($query_leave_type);
                                     while ($row_leave_type = mysqli_fetch_array($result_leave_type)) {
 
                                         $total += $row_leave_type['total_leave'];
                                         ?>                            
-                                        <option value="<?php echo $row_leave_type['id'];?>" > <?php  echo $row_leave_type['leave_name']; ?> </option>                                        
+                                        <!-- <option value="<?php //echo $row_leave_type['id'];?>" > <?php //echo $row_leave_type['leave_name']; ?> </option>  -->
+                                        <option value="<?php echo $row_leave_type['id'];?>" <?php if(isset($row_leave_type['id']) && $row_leave_type['id'] == $_GET['leave_name'])echo 'selected = "selected"';?>> <?php  echo $row_leave_type['leave_name']; ?> </option>                                                                                
                                         <?php
                                     }
                                     ?>
@@ -65,24 +67,13 @@ include("function.php");
                     </div>    
                     <div class="col-md-6">
                         <div class="form-group">
-                            <label class="col-sm-3 control-label" for="example-input-small">Leave Type<span class="text-danger">*</span></label>
+                            <label class="col-sm-3 control-label" for="example-input-small">Status<span class="text-danger">*</span></label>
                             <div class="col-sm-2"></div>
                             <div class="col-sm-6">
-                                <select id="leave_name" name="leave_name" class="form-control input-sm srchclass">                                         
-                                    <option value="">Select Option</option>                                        
-                                    <?php
-                                    $query_leave_type = "SELECT total_leave,leave_name, id FROM leave_type ";
-                                    $total = 0;
-                                    $result_leave_type = $conn->query($query_leave_type);
-                                    while ($row_leave_type = mysqli_fetch_array($result_leave_type)) {
-
-                                        $total += $row_leave_type['total_leave'];
-                                        ?>                            
-                                        <option value="<?php echo $row_leave_type['id'];?>" > <?php  echo $row_leave_type['leave_name']; ?> </option>                                        
-                                        <?php
-                                    }
-                                   
-                                    ?>
+                                <select id="status" name="status" class="form-control input-sm srchclass">                                         
+                                    <option value="">Select Option</option>                                                                            
+                                    <option value="Active">Active</option>                                        
+                                    <option value="InActive">InActive</option>                                        
                                 </select>
                             </div>
                         </div>  
@@ -92,7 +83,7 @@ include("function.php");
                             <label class="col-sm-3 control-label" for="example-input-small"></label>
                             <div class="col-sm-2"></div>
                             <div class="col-sm-6">
-                                <input type="submit" name="leaveDetailsSubmit" id="leaveDetailsSubmit">
+                                <input type="submit" class="btn btn-primary" name="leaveDetailsSubmit" id="leaveDetailsSubmit">
                             </div>
                         </div>  
                     </div>
@@ -101,7 +92,13 @@ include("function.php");
         </div>
     </div>   
 <?php
-$limit = 12;  
+$limit = 12; 
+if(isset($_GET['dtarea']) || isset($_SESSION['dtarea']))
+{
+ $_SESSION['dtarea'] = $_GET['dtarea']; 
+ $limit = $_SESSION['dtarea']; 
+}
+
 if (isset($_GET["page"])) 
 {
    $page  = $_GET["page"];
@@ -114,23 +111,41 @@ $leave_from_date  = date('Y-m-d', strtotime( $from_date ));
 $leave_to_date  = date('Y-m-d', strtotime( $to_date ));
 $search = isset($_GET['search'])? $_GET['search'] :'';
 
-if($_GET['employee_id'])
+$WHERE = 'WHERE';
+
+if(empty($_GET['employee_id']) || empty($_GET['leave_name']) || empty($_GET['status']) || empty($_GET['search']))
 {
-    $WHERE = " WHERE employee_id ='".$_GET['employee_id']."'";
+    $WHERE = '';
 }
 
 if(!empty($search))
 {
-    $WHERE = " WHERE `employee_id` LIKE '%$search%' OR `from_date` LIKE '%$search%'";
+    $WHERE .= "  `employee_id` LIKE '%$search%' OR `from_date` LIKE '%$search%'";
 }
 
-else if ($_SESSION['user_type'] == 'Admin')
+
+if(isset($_GET['employee_id']))
 {
-    $WHERE = '';
+    $WHERE .= " employee_id ='".$_GET['employee_id']."'";
+}
+
+if(isset($_GET['leave_name']))
+{
+    $WHERE .= " AND `leave_type`='".$_GET['leave_name']."' ";
+}
+
+if(isset($_GET['status']))
+{
+    $WHERE .= " AND `status` ='".$_GET['status']."'";
+}
+
+if ($_SESSION['user_type'] == 'Admin')
+{
+    $WHERE .= '';
 } 
 else
 {
-    $WHERE = " WHERE employee_id ='".$_SESSION['id']."'";
+    $WHERE .= " employee_id ='".$_SESSION['id']."'";
 }
 $query  = "SELECT * FROM user_leave  $WHERE  LIMIT $start_from, $limit "; 
 $result = $conn->query($query);
@@ -140,14 +155,14 @@ dateFormate($row['to_date']);
 ?>
 <div class="col-md-12">
     <div class="table-responsive m-b-20">
-        <form role="form" class="form-horizontal" id="form_entries" action="<?php echo $_SERVER['PHP_SELF']; ?>" method="GET" >
+        <form role="form" id="form1" class="form-horizontal" id="form_entries" action="<?php echo $_SERVER['PHP_SELF']; ?>" method="GET" >
             <div class="col-md-1 form-inline" style="float:left">
-                <select name="dtarea" class="form-control input-sm">
+                <select name="dtarea" id="dtarea" class="form-control input-sm">
                     <option value="">Select</option>
-                    <option value="1">10</option>
-                    <option value="2">25</option>
-                    <option value="3">50</option>
-                    <option value="4">100</option>
+                    <option value="5" <?php if($_SESSION['dtarea'] == 5)echo 'selected = "selected"';?>>5</option>
+                    <option value="25" <?php if($_SESSION['dtarea'] == 25)echo 'selected = "selected"';?>>25</option>
+                    <option value="50" <?php if($_SESSION['dtarea'] == 50)echo 'selected = "selected"';?>>50</option>
+                    <option value="100" <?php if($_SESSION['dtarea'] == 100)echo 'selected = "selected"';?>>100</option>                    
                 </select>
             </div>
             <div class="col-md-3" style="float:right">
@@ -184,24 +199,13 @@ dateFormate($row['to_date']);
                         <td><?php echo dateFormate($row['to_date']);?></td>
                         <td><?php echo $row['leave_type']; ?></td>
                         <?php
-                       
-
-                        //echo $firsttime;
                         $x = $total - $row['number_of_days'];
-                        
-
                         if($firsttime>0)
                         {   
                            $x =  $x - $row['number_of_days'];
                         }
-
-                        //$y = $x;
-
-                        //$z = $x - $row['number_of_days'];
-
                         ?>
                         <td><?php echo $x; ?></td> 
-
                         <td><?php echo $row['number_of_days']; ?></td> 
                         <td><?php echo $row['status']; ?></td>  
                         <td><?php echo $row['comment']; ?></td> 
@@ -231,23 +235,11 @@ dateFormate($row['to_date']);
 </div>
 </div>   
 </div>
-
-<script>
-/*$('.srchclass').on('change', function() {
-    var srch_type = $(this).attr("name");
-    var srch_id = $(this).find(":selected").val();
-    if(srch_type == 'employee_id')
-    {
-        url = srch_type+"="+srch_id;
-    }
-    else
-    {
-        url = srch_type+"="+srch_id;
-    }
-    var url = window.location.href; 
-    var arr = url.split('?')[0];
-    var new_url = arr + '?employee_id=' +url; 
-    window.location.href = new_url;
-});*/
-</script>
 <?php include("includes/footer.php"); ?>
+<script>
+$( "#dtarea" ).click(function() {
+      
+      $( "#form1" ).submit();
+    });
+
+</script>

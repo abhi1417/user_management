@@ -3,8 +3,12 @@ session_start();
 include("includes/dbConnection.php");
 include("includes/header.php");
 include("function.php");
-
 $limit = 5;  
+if(isset($_GET['dtarea']) || isset($_SESSION['dtarea']))
+{
+ $_SESSION['dtarea'] = $_GET['dtarea']; 
+ $limit = $_SESSION['dtarea']; 
+}
 if (isset($_GET["page"])) 
 {
  $page  = $_GET["page"];
@@ -28,13 +32,14 @@ dateFormate($row['to_date']);
 
 <div class="row p-t-50">
     <div class="container">
-        <form role="form" class="form-horizontal" id="form_entries" action="<?php echo $_SERVER['PHP_SELF']; ?>" method="GET" >
+        <form role="form" id="form1" class="form-horizontal" id="form_entries" action="<?php echo $_SERVER['PHP_SELF']; ?>" method="GET" >
             <div class="col-md-1 form-inline" style="float:left">
-                <select name="dtarea" class="form-control input-sm">
-                    <option value="1">10</option>
-                    <option value="2">25</option>
-                    <option value="3">50</option>
-                    <option value="4">100</option>
+                <select name="dtarea" id="dtarea" class="form-control input-sm">
+                    <option value="">Select</option>
+                    <option value="5" <?php if($_SESSION['dtarea'] == 5)echo 'selected = "selected"';?>>5</option>
+                    <option value="25" <?php if($_SESSION['dtarea'] == 25)echo 'selected = "selected"';?>>25</option>
+                    <option value="50" <?php if($_SESSION['dtarea'] == 50)echo 'selected = "selected"';?>>50</option>
+                    <option value="100" <?php if($_SESSION['dtarea'] == 100)echo 'selected = "selected"';?>>100</option>  
                 </select>
             </div>
             <div class="col-md-3" style="float:right">
@@ -105,3 +110,10 @@ dateFormate($row['to_date']);
 </div>
 <!-- end row -->
 <?php include("includes/footer.php");?>
+<script>
+$( "#dtarea" ).click(function() {
+      
+      $( "#form1" ).submit();
+    });
+
+</script>

@@ -23,13 +23,13 @@ include("includes/sidebar.php");
             <div class="col-lg-12">
                 <div class="p-20 m-b-20">
                     <div class="col-md-6">
-                        <form role="form" name="myform" id="myform" class="form-horizontal" onsubmit="return package_validation(myform)" action="action.php" method="POST" >
+                        <form role="form" name="myform" id="myform" class="form-horizontal form-validation" onsubmit="return package_validation(myform)" action="action.php" method="POST" >
                             <div class="form-group">
                                 <label class="col-sm-3 control-label" for="example-input-small">Employee<span class="text-danger">*</span></label>
                                 <div class="col-sm-1"></div>
                                 <div class="col-sm-7">
-                                    <select id="employee_id" name="employee_id" class="form-control input-sm" > 
-                                        <option value="0" >Select Employee</option>
+                                    <select id="employee_id" name="employee_id" class="form-control input-sm required" > 
+                                        <option value="" >Select Employee</option>
                                          <?php 
                                               $query = "SELECT id,employee_id, first_name FROM user_employee WHERE  status = '1'";
                                               $result = $conn->query($query);
@@ -53,8 +53,8 @@ include("includes/sidebar.php");
                                 <label class="col-sm-3 control-label" for="example-input-small">Leave Type<span class="text-danger">*</span></label>
                                 <div class="col-sm-1"></div>
                                 <div class="col-sm-7">
-                                    <select id="leave" name="leave_type" class="form-control input-sm" required> 
-                                        <option value="0" >Select Employee</option>
+                                    <select id="leave" name="leave_type" class="form-control input-sm required"> 
+                                        <option value="" >Select Employee</option>
                                          <?php 
                                               $query = "SELECT * FROM leave_type WHERE  status = '1'";
                                               $result = $conn->query($query);
@@ -86,7 +86,7 @@ include("includes/sidebar.php");
                                 <label class="col-sm-3 control-label" for="example-input-small">Form Date<span class="text-danger">*</span></label>
                                 <div class="col-sm-2"></div>
                                 <div class="col-sm-6 ">
-                                    <input type="text" class="form-control input-sm" placeholder="dd/mm/yyyy" id="datepicker-autoclose" name="from_date" id="from_date">
+                                    <input type="text" class="form-control input-sm required" placeholder="dd/mm/yyyy" id="datepicker-autoclose" name="from_date" id="from_date">
                                     <span class=".error_msg"></span>
                                 </div>
                             </div>
@@ -94,14 +94,14 @@ include("includes/sidebar.php");
                                 <label class="col-sm-3 control-label" for="example-input-small">To Date<span class="text-danger">*</span></label>
                                 <div class="col-sm-2"></div>
                                 <div class="col-sm-6 ">
-                                    <input type="text" class="form-control input-sm" placeholder="dd/mm/yyyy" id="datepicker" name="to_date" id="to_date" >
+                                    <input type="text" class="form-control input-sm required" placeholder="dd/mm/yyyy" id="datepicker" name="to_date" id="to_date" >
                                     <span class=".error_msg"></span>
                                 </div>
                             </div> 
                             <div class="form-group">
                                 <label class="col-sm-3 control-label">Comment<span class="text-danger">*</span></label>
                                 <div class="col-sm-8">
-                                    <textarea class="form-control" name="comment" id="comment" ></textarea>
+                                    <textarea class="form-control required" name="comment" id="comment" ></textarea>
                                     <span class=".error_msg"></span>
                                 </div>
                             </div>

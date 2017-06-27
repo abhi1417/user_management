@@ -24,35 +24,40 @@ include("includes/sidebar.php");
                 <h4 class="header-title m-t-0">News Section</h4>
                 <!-- Pesronal Information Start -->
                 <div class="p-20 m-b-20">
-                       <form name="myForm" id="myform" action="action.php" method="POST" class="form-horizontal" onsubmit="return package_validation(myform)" role="form" enctype="multipart/form-data">                
+                       <form name="myForm" id="myform" action="action.php" method="POST" class="form-horizontal form-validation" onsubmit="return package_validation(myform)" role="form" enctype="multipart/form-data">                
                         <div class="form-group">
                             <label for="tittle" class="col-sm-3 control-label">News tittle *</label>
                             <div class="col-xs-4">
-                                <input type="text" id="tittle" placeholder="News Tittle" value="" name="tittle" class="form-control ">
+                                <input type="text" id="tittle" placeholder="News Tittle" value="" name="tittle" class="form-control required ">
+                                 <span class=".error_msg"></span>
                             </div>
                         </div>
                         <div class="form-group" >
                             <label for="image" class="col-sm-3 control-label">Image Preview*</label>
                             <div class="main-img-preview col-xs-4">
-                                <img class="thumbnail img-preview" width="150" src="http://static.cio.nl/thumbnails/125x125/1/3/134bfff302873d04eec31aa5c01130d5.png" title="Preview Logo">
+                                <img class="thumbnail img-preview" width="150" src="http://static.cio.nl/thumbnails/125x125/1/3/134bfff302873d04eec31aa5c01130d5.png" title="Preview Logo" class="required">
+                                 <span class=".error_msg"></span>
                             </div>                
                         </div>    
                         <div class="form-group" >
                             <label for="image" class="col-sm-3 control-label">News Image *</label>
                             <div class="col-xs-4">
-                                <input type="file" id="image" name="image" value="" class="filestyle form-control attachment_upload" data-icon="false">
+                                <input type="file" id="image" name="image" value="" class="filestyle form-control attachment_upload required" data-icon="false">
+                                 <span class=".error_msg"></span>
                             </div>  
                         </div>
                         <div class="form-group">
                             <label for="news_date" class="col-sm-3 control-label">News Date *</label>
                             <div class="col-xs-4">
-                                <input type="text" class="form-control" placeholder="yyyy/mm/dd" id="datepicker1" name="news_date" id="news_date">
+                                <input type="text" class="form-control required" placeholder="yyyy/mm/dd" id="datepicker1" name="news_date" id="news_date">
+                                 <span class=".error_msg"></span>
                             </div>
                         </div>
                         <div class="form-group ">
                             <label for="description" class="col-sm-3 control-label">Description *</label>  
                             <div class="col-xs-4" >
-                                <textarea class="form-control " name="description" value="" rows="10" cols="80" minlength="5" maxlength="500" id="description"></textarea>
+                                <textarea class="form-control required" name="description" value="" rows="10" cols="80" minlength="5" maxlength="500" id="description"></textarea>
+                                 <span class=".error_msg"></span>
                             </div>
                         </div>
                         <div class="form-group">

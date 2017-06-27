@@ -28,8 +28,8 @@ include("includes/sidebar.php");
                              <div class="form-group">
                                 <label for="user_name" class="col-sm-3 control-label">UserName *</label>
                                 <div class="col-xs-4">
-                                    <select id="user_name" name="user_name" class="form-control input-sm" > 
-                                        <option value="0" >Select Employee</option>
+                                    <select id="user_name" name="user_name" class="form-control input-sm required" > 
+                                        <option value="" >Select Employee</option>
                                          <?php 
                                               $query = "SELECT employee_id, first_name FROM user_employee WHERE  status = '1'";
                                               $result = $conn->query($query);
@@ -48,37 +48,37 @@ include("includes/sidebar.php");
                             <div class="form-group">
                                 <label for="bill_name" class="col-sm-3 control-label">Bill Name *</label>
                                 <div class="col-xs-4">
-                                    <input type="text" id="bill_name" placeholder="Bill Name" value="" name="bill_name" class="form-control ">
+                                    <input type="text" id="bill_name" placeholder="Bill Name" value="" name="bill_name" class="form-control required ">
                                     <span class=".error_msg"></span>
                                 </div>
                             </div>
                             <div class="form-group">
                                 <label for="bill_date" class="col-sm-3 control-label">Effective From *</label>
                                 <div class="col-xs-4">
-                                    <input type="text" class="form-control" placeholder="yyyy/mm/dd" id="datepicker1" name="bill_date" id="bill_date">
+                                    <input type="text" class="form-control required" placeholder="yyyy/mm/dd" id="datepicker1" name="bill_date" id="bill_date">
                                     <span class=".error_msg"></span>
                                 </div>
                             </div>
                             <div class="form-group">
                                 <label for="bill_amount" class="col-sm-3 control-label">Bill Amount *</label>
                                 <div class="col-xs-4">
-                                    <input type="text" id="bill_amount" placeholder="Bill Amount" value="" name="bill_amount" class="form-control ">
+                                    <input type="text" id="bill_amount" placeholder="Bill Amount" value="" name="bill_amount" class="form-control required ">
+                                    <span class=".error_msg"></span>
+                                </div>
+                            </div>
+                            <div class="form-group ">
+                                <label for="bill_description" class="col-sm-3 control-label">Bill Description *</label>  
+                                <div class="col-xs-4" >
+                                    <textarea class="form-control required " name="bill_description" value="" rows="10" cols="50" minlength="5" maxlength="100" placeholder="Members/Place/Bill Type" id="bill_description"></textarea>
                                     <span class=".error_msg"></span>
                                 </div>
                             </div>
                             <div class="form-group dvPdf_box" >
                                 <label for="bill_file_path" class="col-sm-3 control-label">Bill PDF/Image *</label>
                                 <div class="col-xs-4 dvFile" >
-                                    <input type="file" id="bill_file_path" name="bill_file_path" value="" class="filestyle form-control" data-icon="false">
+                                    <input type="file" id="bill_file_path" name="bill_file_path" value="" class="filestyle form-control required" data-icon="false">
                                     <span class=".error_msg"></span>
                                 </div>  
-                            </div>
-                            <div class="form-group ">
-                                <label for="bill_description" class="col-sm-3 control-label">Bill Description *</label>  
-                                <div class="col-xs-4" >
-                                    <textarea class="form-control " name="bill_description" value="" rows="10" cols="50" minlength="5" maxlength="100" placeholder="Members/Place/Bill Type" id="bill_description"></textarea>
-                                    <span class=".error_msg"></span>
-                                </div>
                             </div>
                             <div class="form-group">
                                 <div class="col-sm-9 col-sm-offset-3">

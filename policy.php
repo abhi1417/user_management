@@ -24,37 +24,40 @@ include("includes/sidebar.php");
                 <h4 class="header-title m-t-0">Policy Information</h4>
                 <!-- Pesronal Information Start -->
                 <div class="p-20 m-b-20">
-                	<form name="myForm" id="myform" action="action.php" method="POST" onsubmit="return package_validation(myform)" class="form-horizontal" role="form" enctype="multipart/form-data">                
+                	<form name="myForm" id="myform" action="action.php" method="POST" onsubmit="return package_validation(myform)" class="form-horizontal form-validation" role="form" enctype="multipart/form-data">                
                 		<div class="form-group">
                 			<label for="policy_type" class="col-sm-3 control-label">Policy Name *</label>
 			                <div class="col-xs-4">
-            			    	<input type="text" id="policy_type" placeholder="Policy Name" value="" name="policy_type" class="form-control ">
+            			    	<input type="text" id="policy_type" placeholder="Policy Name" value="" name="policy_type" class="form-control required ">
+                                <span class=".error_msg"></span>
                 			</div>
         				</div>
                         <div class="form-group">
                             <label for="from_date" class="col-sm-3 control-label">Effective From *</label>
                             <div class="col-xs-4">
-                                <input type="text" class="form-control" placeholder="yyyy/mm/dd" id="datepicker1" name="from_date" id="from_date">
+                                <input type="text" class="form-control required" placeholder="yyyy/mm/dd" id="datepicker1" name="from_date" id="from_date">
+                                <span class=".error_msg"></span>
                             </div>
                         </div>
                         <div class="form-group">                                        
                             <label for="to_date" class="col-sm-3 control-label">Effective Till *</label>
                             <div class="col-xs-4">
-                                <input type="text" class="form-control" placeholder="yyyy/mm/dd" id="datepicker2" name="to_date" id="to_date">
+                                <input type="text" class="form-control required" placeholder="yyyy/mm/dd" id="datepicker2" name="to_date" id="to_date">
+                                <span class=".error_msg"></span>
                             </div>
                         </div>    
         				<div class="form-group dvPdf_box" >
                             <label for="file_path" class="col-sm-3 control-label">PDF *
-                                <input type="checkbox" id="chkPdf" /></label>
+                                <input type="checkbox" id="chkPdf" class="required"/></label>
                             <div class="col-xs-4 dvFile" style="display:none;">
-                            	<input type="file" id="file_path" name="file_path" value="" class="filestyle form-control" data-icon="false">
+                            	<input type="file" id="file_path" name="file_path" value="" class="filestyle form-control required" data-icon="false">                                
                             </div>	
                         </div>
                         <div class="form-group ">
 		                	<label for="comment" class="col-sm-3 control-label">Content *
-                                <input type="checkbox" id="chkContent" /></label>  
+                                <input type="checkbox" id="chkContent" class="required" /></label>  
 		                    <div class="col-xs-4 dvContent" style="display:none;" >
-		                    	<textarea class="form-control " name="comment" value="" rows="5" colums="20" id="comment"></textarea>
+		                    	<textarea class="form-control required" name="comment" value="" rows="5" colums="20" id="comment"></textarea>
 		                    </div>
 		                </div>
 		                <div class="form-group">
@@ -64,10 +67,10 @@ include("includes/sidebar.php");
 		                </div>
 		            </form> 
 				</div>
-			</div><!-- Col-md-6 end-->
-		</div><!-- End row-->
-	</div><!-- end container -->
-</div><!-- End #page-right-content --> 
+			</div>
+		</div>
+	</div>
+</div>
 
 <?php include("includes/footer.php"); ?>
 <script>
